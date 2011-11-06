@@ -1,0 +1,17 @@
+a0fa15d99bf3c9b5fbeb3b0c672986d7 *DESCRIPTION
+cb41f346e20574b3c93971edc8d9da42 *R/HTSCluster-internal.R
+97efb4cc0e74a346c97b0e36bf09a2f4 *R/PoisMixClus.R
+6ecf19c0388bf54502c6b16214063b3d *R/PoisMixMean.R
+f0e9bad82cdd1a43712f875607d58a9f *R/PoisMixSim.R
+60a410612701f83db2eba9792dc191f4 *R/emInit.R
+63ad6e43fa742d68c726f2bf1f2f7852 *R/kmeanInit.R
+9f2a9211dd54deef7d14b529f1712a2a *R/logLikePoisMix.R
+0736bf2e952a7e4339cd43a28b852063 *R/logLikePoisMixDiff.R
+9d71e5c33606d80fe0ca97d29b4c455a *R/probaPost.R
+18e987a8307b680b3ca8cf658830d6be *man/HTSCluster-package.Rd
+f48228388a0128a807f3c54f05d06a9e *man/Init.Rd
+01ddb7513130e3c05f165a8fc3e70742 *man/PoisMixClus.Rd
+d3960ee9016be0f45517808096369e64 *man/PoisMixMean.Rd
+3eceebf9624eb743138d92fd20dfda00 *man/PoisMixSim.Rd
+c8a19a1dee5b1478088b1e429dde0a00 *man/logLikePoisMix.Rd
+463811e8ce485f666555ddd56d15c38f *man/probaPost.Rd
