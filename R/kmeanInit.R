@@ -54,7 +54,7 @@ lambda.init <- matrix(NA, nrow = d, ncol = g)
 for(j in 1:d) {
 denom.bis <- denom * s.dot[j]
 num <- colSums(partition.mat *
-rowSums(as.matrix(y[,which(conds == j)])))
+rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])))
 lambda.init[j,] <- num / denom.bis
 }
 pi.init <- as.vector(table(g.init$cluster)/n)

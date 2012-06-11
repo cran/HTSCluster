@@ -9,7 +9,7 @@ This function implements the EM and CEM algorithms for parameter estimation in a
 \usage{
 PoisMixClus(y, gmin, gmax, lib.size = TRUE, lib.type = "TC", 
     conds, init.type = "small-em", alg.type = "EM", 
-    cutoff = 1e-05, iter = 1000, verbose = FALSE)
+    cutoff = 1e-05, iter = 1000, mean.filter = FALSE, verbose = FALSE)
 }
 
 \arguments{
@@ -43,11 +43,16 @@ Cutoff to declare algorithm convergence (in terms of differences in log likeliho
   \item{iter}{
 Maximum number of iterations to be run for the chosen algorithm
 }
+  \item{mean.filter}{
+Option threshold value for filtering genes with a mean count across all samples less than \code{mean.filter}.
+}
   \item{verbose}{
 If \code{TRUE}, include verbose output
 }
 }
 \details{
+Output is an S3 object of class \code{HTSCluster}.
+
 In a Poisson mixture model, the data \eqn{\mathbf{y}}{y} are assumed to come from \emph{g} distinct subpopulations (clusters), each of which is modeled separately; the overall population is thus a mixture of these subpopulations. In the case of a Poisson mixture model with \emph{g} components, the model may be written as
 
 \deqn{f(\mathbf{y};g,\ensuremath\boldsymbol{\Psi}_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \ensuremath\boldsymbol{\theta}_k)}{f(y;g,\psi_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \theta_k)}
@@ -82,7 +87,14 @@ There are two approaches to estimating the parameters of a finite mixture model 
 \item{pi.ICL }{Vector of length \code{g.ICL} containing the estimate of \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}} for the model selected via the ICL (with number of clusters \code{g.ICL})}
 \item{probaPost.BIC }{(\emph{n} x \code{g.BIC}) matrix containing the conditional probabilities of belonging to each cluster for all observations for the model selected via the BIC (with number of clusters \code{g.BIC})}
 \item{probaPost.ICL }{(\emph{n} x \code{g.ICL}) matrix containing the conditional probabilities of belonging to each cluster for all observations for the model selected via the ICL (with number of clusters \code{g.ICL})}
+\item{lib.size }{TRUE if library size included in the model (matches the argument \code{alg.type} above)}
+\item{lib.type }{Type of library size normalization used (if \code{lib.size = TRUE}; matches the argument \code{alg.type} above)}
+\item{s }{Library size normalization factors used (if \code{lib.size = TRUE})}
+\item{y }{Data (matches the argument \code{y} above, unless observations were removed using the optional \code{mean.filter})}
+\item{ind.remove }{Indices for observations removed using the optional \code{mean.filter}}
+\item{mean.filter }{Matched the argument \code{mean.filter} above}
 }
+
 \references{
 Anders, S. and Huber, W. (2010) Differential expression analysis for sequence count data. \emph{Genome Biology}, \bold{11}(R106), 1-28.
 
@@ -117,12 +129,7 @@ conds <- simulate$conditions
 run <- PoisMixClus(y, gmin = 3, gmax = 5, lib.size = TRUE, lib.type = "TC",
     conds = conds, init.type = "small-em") 
 
-## ICL criterion selects g = 4 classes
-## > run$ICL.all
-##         g=3       g=4       g=5
-## 1 -14119.62 -9945.746 -9971.544
-
-## Estimates of pi and lambda for the selected model (g = 4)
+## Estimates of pi and lambda for the selected model
 pi.est <- run$pi.ICL
 lambda.est <- run$lambda.ICL
 

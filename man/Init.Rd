@@ -82,16 +82,6 @@ init.values <- emInit(y, g = 4, conds, lib.size = TRUE,
 pi.init <- init.values$pi.init
 lambda.init <- init.values$lambda.init
 
-## > pi.init
-##  Cluster 1  Cluster 2  Cluster 3  Cluster 4 
-## 0.09659369 0.33289211 0.38439010 0.18612411 
-## >
-## > lambda.init
-##   Cluster 1 Cluster 2 Cluster 3 Cluster 4
-## 1 0.2543011 0.7618805 1.2588717 1.2597545
-## 2 0.9117585 1.5157468 0.9123846 0.3060517
-## 3 2.8558488 0.5705673 0.5779289 1.7152452
-
 }
 \keyword{ models }
 

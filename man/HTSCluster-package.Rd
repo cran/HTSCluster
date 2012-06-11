@@ -6,14 +6,18 @@
 Clustering high throughput sequencing (HTS) data
 }
 \description{
-This package implements two parameterizations of a Poisson mixture model to cluster observations (e.g., genes) in high throughput sequencing data. Parameter estimation is performed using either the EM or CEM algorithm, and the BIC or ICL criteria are used for model selection (i.e., to choose the number of clusters).
+This package implements two parameterizations of a Poisson mixture model to 
+cluster observations (e.g., genes) in high throughput sequencing data. 
+Parameter estimation is performed using either the EM or CEM algorithm, and the 
+BIC or ICL criteria are used for model selection (i.e., to choose the number of 
+clusters).
 }
 \details{
 \tabular{ll}{
 Package: \tab HTSCluster\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2011-11-06\cr
+Version: \tab 1.1\cr
+Date: \tab 2012-06-11\cr
 License: \tab GPM (>=2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -47,12 +51,7 @@ conds <- simulate$conditions
 run <- PoisMixClus(y, gmin = 3, gmax = 5, lib.size = TRUE, 
     lib.type = "TC", conds = conds, init.type = "small-em") 
 
-## ICL criterion selects g = 4 classes
-## > run$ICL.all
-##         g=3       g=4       g=5
-## 1 -14119.62 -9945.746 -9971.544
-
-## Estimates of pi and lambda for the selected model (g = 4)
+## Estimates of pi and lambda for the selected model
 pi.est <- run$pi.ICL
 lambda.est <- run$lambda.ICL
 

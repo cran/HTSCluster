@@ -1,13 +1,13 @@
 PoisMixClus <-
 function(y, gmin, gmax, lib.size = TRUE, lib.type = "TC", conds, 
-init.type = "small-em", alg.type = "EM", cutoff = 10e-6, iter = 1000, 
+init.type = "small-em", alg.type = "EM", cutoff = 10e-6, iter = 1000, mean.filter = FALSE,
 verbose = FALSE) {
 
 if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
 	stop(paste(sQuote("y"), "must be a matrix"))
 if(min(y) < 0 | sum(round(y)) != sum(y)) 
 	stop(paste(sQuote("y"), "must be a matrix made up of nonnegative counts"))
-if(min(rowSums(y)) == 0)
+if(min(rowSums(y)) == 0 & mean.filter == FALSE)
 	stop(paste("at least one observation in", sQuote("y"), "contains all 0's and must be removed from the data"))
 if(length(gmin) != 1)
 	stop(paste(sQuote("gmin"), "(the minimum number of clusters) must be a nonnegative integer"))
@@ -41,7 +41,6 @@ if(length(alg.type) > 1)
 if(is.logical(verbose) == FALSE)
 	stop(paste(sQuote("verbose"), "must be", dQuote("TRUE"), "or", dQuote("FALSE")))
 
-n <- dim(y)[1];cols <- dim(y)[2]
 ## Grouping columns of y in order of condition (all replicates put together)
 o.ycols <- order(conds)
 y <- y[,o.ycols]
@@ -51,7 +50,18 @@ conds.names <- unique(conds)
 d <- length(unique(conds))
 r <- as.vector(table(conds))
 diff <- 100 ## Convergence criterion
-y <- as.matrix(y, nrow = n, ncol = cols)
+if(length(rownames(y)) == 0) rn <- 1:nrow(y);
+if(length(rownames(y)) > 0) rn <- rownames(y);
+y <- as.matrix(y, nrow = nrow(y), ncol = ncol(y))
+rownames(y) <- rn;
+## Remove genes with very low overall counts
+ind.remove <- NA
+if(mean.filter != FALSE & is.numeric(mean.filter) == TRUE) {
+	ind.remove <- which(rowMeans(y) < mean.filter)
+	if(length(ind.remove) > 0) y <- y[-ind.remove,];
+}
+n <- dim(y)[1];cols <- dim(y)[2]
+
 w <- rowSums(y)
 s <- rep(NA, cols)
 if(lib.size == FALSE) {
@@ -128,7 +138,7 @@ denom <- colSums(partition.mat * w)
 for(j in 1:d) {
 denom.bis <- denom * s.dot[j]
 num <- colSums(partition.mat * 
-rowSums(as.matrix(y[,which(conds == j)])))
+rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])))
 lambda[j,] <- num / denom.bis
 }
 }
@@ -139,7 +149,7 @@ denom <- colSums(t * w)
 for(j in 1:d) {
 denom.bis <- denom * s.dot[j]
 num <- colSums(t * 
-matrix(rep(rowSums(as.matrix(y[,which(conds == j)])),K), 
+matrix(rep(rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])),K), 
 ncol = K))
 lambda[j,] <- num / denom.bis
 }
@@ -228,12 +238,16 @@ pi.ICL <- pi.final[[which(ICL == ICL.choice)]]
 }
 }
 
-return(list(lambda = lambda.final, pi = pi.final, labels = labels, 
+results <- list(lambda = lambda.final, pi = pi.final, labels = labels, 
 probaPost = probaPost, BIC.all = -BIC, ICL.all = -ICL, 
 alg.type = alg.type, BIC = -BIC.choice, ICL = -ICL.choice, 
 g.BIC = g.BICchoice, g.ICL = g.ICLchoice, labels.BIC = lab.BIC,
 labels.ICL = lab.ICL, lambda.BIC = lambda.BIC, pi.BIC = pi.BIC,
 lambda.ICL = lambda.ICL, pi.ICL = pi.ICL, probaPost.BIC = probaPost.BIC,
-probaPost.ICL = probaPost.ICL))
+probaPost.ICL = probaPost.ICL, lib.size = lib.size, lib.type = lib.type, s = s,
+y = y, conds = conds, ind.remove = ind.remove, mean.filter = mean.filter)
+
+class(results) <- "HTSCluster"
+return(results)
 }
 

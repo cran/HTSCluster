@@ -74,14 +74,7 @@ lambda.est <- run$lambda[[1]]
 proba <- probaPost(y, g = 4, conds = conds, pi = pi.est, s = s, 
 	lambda = lambda.est)
 
-## > head(round(proba,2))    ## First 6 rows
-##      [,1] [,2] [,3] [,4]
-## [1,] 0.00 1.00    0    0
-## [2,] 1.00 0.00    0    0
-## [3,] 0.00 1.00    0    0
-## [4,] 0.98 0.02    0    0
-## [5,] 0.00 1.00    0    0
-## [6,] 0.01 0.99    0    0
+## head(round(proba,2))
 
 }
 \keyword{ methods }

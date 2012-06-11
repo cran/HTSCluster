@@ -1,5 +1,5 @@
 logLikePoisMix <-
-function(y, mean, pi) {
+function(y, mean, pi, smoothing = TRUE) {
 if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
 	stop(paste(sQuote("y"), "must be a matrix"))
 if(min(y) < 0 | sum(round(y)) != sum(y)) 
@@ -11,7 +11,6 @@ if(length(mean) != length(pi))
 g <- length(pi)
 n <- dim(y)[1]; cols <- dim(y)[2];
 y <- matrix(y, nrow = n, ncol = cols)
-smoothing <- FALSE
 logLike <- rep(0, n)
 for(i in 1:n) {
 tmp <- 0
