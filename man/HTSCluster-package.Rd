@@ -6,7 +6,7 @@
 Clustering high throughput sequencing (HTS) data
 }
 \description{
-This package implements two parameterizations of a Poisson mixture model to 
+This package implements estimation of a Poisson mixture model to 
 cluster observations (e.g., genes) in high throughput sequencing data. 
 Parameter estimation is performed using either the EM or CEM algorithm, and the 
 BIC or ICL criteria are used for model selection (i.e., to choose the number of 
@@ -16,9 +16,9 @@ clusters).
 \tabular{ll}{
 Package: \tab HTSCluster\cr
 Type: \tab Package\cr
-Version: \tab 1.1\cr
-Date: \tab 2012-06-11\cr
-License: \tab GPM (>=2)\cr
+Version: \tab 2.0.0\cr
+Date: \tab 2013-09-25\cr
+License: \tab GPL (>=3)\cr
 LazyLoad: \tab yes\cr
 }
 }
@@ -44,15 +44,48 @@ simulate <- PoisMixSim(n = 200, libsize = "A", separation = "high")
 y <- simulate$y
 conds <- simulate$conditions
 
-## Run the PMM-II model for g = {3, 4, 5}
+## Run the PMM model for g = 3
 ## "TC" library size estimate, EM algorithm
-## Model selection via the ICL
 
-run <- PoisMixClus(y, gmin = 3, gmax = 5, lib.size = TRUE, 
-    lib.type = "TC", conds = conds, init.type = "small-em") 
+run <- PoisMixClus(y, g = 3, conds = conds, lib.type = "TC") 
 
 ## Estimates of pi and lambda for the selected model
-pi.est <- run$pi.ICL
-lambda.est <- run$lambda.ICL
+
+pi.est <- run$pi
+lambda.est <- run$lambda
+
+
+## Not run: PMM for 4 total clusters, with one fixed class
+## "TC" library size estimate, EM algorithm
+##
+## run <- PoisMixClus(y, g = 3, lib.type = "TC", conds = conds, 
+##    fixed.lambda = list(c(1,1,1))) 
+##
+##
+## Not run: PMM model for 4 clusters, with equal proportions
+## "TC" library size estimate, EM algorithm
+##
+## run <- PoisMixClus(y, g = 4, lib.type = "TC", conds = conds, 
+##     equal.proportions = TRUE) 
+##
+##
+## Not run: PMM model for g = 1, ..., 10 clusters, Split Small-EM init
+##
+## run1.10 <- PoisMixClusWrapper(y, gmin = 1, gmax = 10, conds = conds, 
+##	lib.type = "TC")
+##
+##
+## Not run: PMM model for g = 1, ..., 10 clusters, Small-EM init
+##
+## run1.10bis <-  <- PoisMixClusWrapper(y, gmin = 1, gmax = 10, conds = conds, 
+##	lib.type = "TC", split.init = FALSE)
+##
+##
+## Not run: previous model equivalent to the following
+##
+## for(K in 1:10) {
+##	run <- PoisMixClus(y, g = K, conds = conds, lib.type = "TC")
+## }
+
 
 }

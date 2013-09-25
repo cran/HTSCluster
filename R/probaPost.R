@@ -40,6 +40,8 @@ t <- apply(t, 2, function(x) x/rowSums(t))
 ## Smoothing prior to M-Step (0's set to 1e-10, 1's set to 1-1e-10)
 epsilon <- 1e-10;maxcut <- 1-epsilon; mincut <- epsilon
 t <- apply(t, 2, pmax, mincut); t <- apply(t, 2, pmin, maxcut);
+## ADDED
+t <- t / rowSums(t)
 return(t)
 }
 

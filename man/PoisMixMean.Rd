@@ -35,7 +35,7 @@ Estimate of normalized per-variable library size
 A list of length \code{g} containing the (\emph{n} x \emph{q}) matrices of mean expression for all observations, conditioned on each of the \code{g} clusters
 }
 \references{
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
 }
 \author{
 Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
@@ -56,16 +56,16 @@ y <- simulate$y
 conds <- simulate$conditions
 s <- colSums(y) / sum(y) 	## TC estimate of lib size
 
-## Run the PMM-II model for g = 4
+## Run the PMM-II model for g = 3
 ## "TC" library size estimate, EM algorithm
 
-run <- PoisMixClus(y, gmin = 4, gmax = 4, lib.size = TRUE, 
+run <- PoisMixClus(y, g = 3, lib.size = TRUE, 
     lib.type = "TC", conds = conds) 
-pi.est <- run$pi[[1]]
-lambda.est <- run$lambda[[1]]
+pi.est <- run$pi
+lambda.est <- run$lambda
 
 ## Calculate the per-cluster mean for each observation
-means <- PoisMixMean(y, g = 4, conds, s, lambda.est) 
+means <- PoisMixMean(y, g = 3, conds, s, lambda.est) 
 
 }
 \keyword{ methods }

@@ -35,7 +35,7 @@ Vector of length \emph{q} containing the estimates for the normalized library si
 
 }
 \references{
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
 }
 \author{
 Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
@@ -62,16 +62,16 @@ y <- simulate$y
 conds <- simulate$conditions
 s <- colSums(y) / sum(y)     ## TC estimate of lib size
 
-## Run the PMM-II model for g = 4
+## Run the PMM-II model for g = 3
 ## "TC" library size estimate, EM algorithm
 
-run <- PoisMixClus(y, gmin = 4, gmax = 4, lib.size = TRUE, lib.type = "TC",
+run <- PoisMixClus(y, g = 3, lib.size = TRUE, lib.type = "TC",
  	conds = conds) 
-pi.est <- run$pi[[1]]
-lambda.est <- run$lambda[[1]]
+pi.est <- run$pi
+lambda.est <- run$lambda
 
 ## Calculate the conditional probability of belonging to each cluster
-proba <- probaPost(y, g = 4, conds = conds, pi = pi.est, s = s, 
+proba <- probaPost(y, g = 3, conds = conds, pi = pi.est, s = s, 
 	lambda = lambda.est)
 
 ## head(round(proba,2))

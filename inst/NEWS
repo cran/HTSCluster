@@ -1,0 +1,53 @@
+            
+                RELEASE HISTORY OF HTSCluster PACKAGE
+             ========================================
+
+
+		CHANGES IN HTSCluster VERSION 1.99.0
+
+- Created vignette and doc directories.
+- Moved edgeR to IMPORTS rather than DEPENDS.
+- Additional plotting option for lambda using ggplot2 and RColorBrewer, both of
+  which have been added as dependencies in the namespace.
+- Behavior of clusters can now be interpreted with respect to overall gene expression
+  (interpretation = "sum" in the PoisMixClus and PoisMixClusWrapper functions) or with
+  respect to mean gene expression (interpretation = "mean").
+- Added user-specific parameters init.runs (number of small-EM algorithms to
+  run for initialization) and init.iter (number of iterations to run within each
+  small-EM algorithm).
+- Added highDimensionARI function
+- Renormalized posterior probabilities after smoothing in probaPost function.
+- Removed smoothing option from logLikePoisMix() and implemented numerical
+  technique suggested by P. Papastamoulis to calculate log likelihood.
+- Mean.filter argument removed from PoisMixClus function.
+- Changed "Q" to "UQ" (Upper Quantile), and added "Med" (Median),
+  "DESeq" (normalization in DESeq package), and "TMM" (Trimmed Means
+  of M values, from the edgeR package) for library size normalization.
+- Changed PoisMixClus to estimate a Poisson mixture model for a single
+  number of clusters. To estimate a PMM for a series of cluster sizes and
+  perform model selection, added the wrapper function PoisMixClusWrapper,
+  which enables the user to perform initialization using the small EM strategy
+  (as before) or the initialization strategy proposed by Panos Papastamoulis via
+  the functions splitEMInit and probaPostInit.
+- Added the possibility to estimate model for equally proportioned
+  clusters, as well as to include a cluster with fixed parameter values.
+- Creation of S3 class "HTSClusterWrapper" and associated S3 methods
+  plot.HTSClusterWrapper and summary.HTSClusterWrapper.
+- The number of free parameters for the BIC and ICL criteria now does not include
+  the n per-gene w parameters, as these are considered to be fixed.
+
+		CHANGES IN HTSCluster VERSION 1.1
+
+- Smoothing option (default = TRUE) has been added to logLikePoisMix() to
+  alleviate numerical errors.
+- Creation of NAMESPACE, NEWS, and CITATION information.
+- Creation of S3 class "HTSCluster" and associated S3 methods plot.HTSCluster
+  and summary.HTSCluster. The plot.HTSCluster function now depends on the
+  plotrix package, which has been added to Depends in DESCRIPTION.
+- Fixed initialization bug for data with non-numerical condition names in
+  kmeanInit function.
+- License updated to GPL (>=3)
+
+		CHANGES in HTSCLuster VERSION 1.0
+
+This is the first release (7 November 2011).

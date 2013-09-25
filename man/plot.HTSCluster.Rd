@@ -1,24 +1,33 @@
 \name{plot.HTSCluster}
 \alias{plot.HTSCluster}
+\alias{plot.HTSClusterWrapper}
 \title{Visualize results from clustering using a Poisson mixture model}
 \description{
 A function to visualize the clustering results obtained from a Poisson mixture model.
 }
 \usage{
-\method{plot}{HTSCluster}(x, cluster.choice = "ICL", file.name = FALSE, 
-	graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), ...)
+\method{plot}{HTSCluster}(x, data, file.name = FALSE, 
+    graphs = c("map", "map.bycluster", "lambda"), 
+    lambda.plot = c("bar"), ...)
+\method{plot}{HTSClusterWrapper}(x, file.name = FALSE,
+    graphs = c("ICL", "BIC"), ...)
 }
 \arguments{
-  \item{x}{ An object of class \code{"HTSCluster"}}
-  \item{cluster.choice}{  The number of clusters desired, as selected by the "ICL"
-criterion (the default), the "BIC" criterion, or an arbitrary number of clusters
-among those estimated in \code{x}}
+  \item{x}{ An object of class \code{"HTSCluster"} or \code{"HTSClusterWrapper"}}
+  \item{data}{
+(\emph{n} x \emph{q}) matrix of observed counts for \emph{n} observations and \emph{q} variables
+}
   \item{file.name}{ Optional file name if plots are to be saved in a PDF file.}
-  \item{graphs}{ Type of graph to be included in plots.}
+  \item{graphs}{ Type of graph to be included in plots. May be equal to
+  \code{"map"}, \code{"may.bycluster"}, \code{"weighted.histograms"}, and/or \code{"lambda"} for objects
+  of class \code{"HTSCluster"} and \code{c("ICL", "BIC")} for objects of class
+  \code{"HTSClusterWrapper"}}
+  \item{lambda.plot}{ Type of plot to be used for the \code{lambda} plot, \code{"bar"} (default),
+	\code{"pie"} or \code{"stars"}}
   \item{...}{Additional arguments (mainly useful for plotting)}
 }
 \details{
-Provides the following visualizations:
+For objects of class \code{"HTSCluster"}, the plotting function provides the possibility for the following visualizations:
 
 1) A histogram of maximum conditional probabilities across all clusters.
 
@@ -32,9 +41,16 @@ Poisson mixture model are overlaid in red.
 4) A global view of \eqn{\ensuremath\boldsymbol{\lambda}}{\lambda} and \eqn{\ensuremath\boldsymbol{\pi}}{\pi} values for the selected model. When the
 number of conditions <= 2, bar heights represent the value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} for each
 cluster, and bar width corresponds to the value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}. When the number of
-conditions > 2, star plots are drawn for each cluster to illustrate the relative
-value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} in each condition, where half-circle radiuses reflect the corresponding
+conditions > 2, either bar, pie or star plots are drawn for each cluster to illustrate the relative
+value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} in each condition, where for the star plots, half-circle radiuses reflect the corresponding
 value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}.
+
+
+For objects of class \code{"HTSClusterWrapper"}, the plotting function provides the possibility for one or both of the following visualizations:
+
+1) ICL plot for all fitted models.
+
+2) BIC plot for all fitted models.
 }
 
 \references{
@@ -44,7 +60,7 @@ RR-7786, Inria Saclay -- Ile-de-France.
 }
 \author{Andrea Rau}
 
-\seealso{\code{\link{PoisMixClus}}}
+\seealso{\code{\link{PoisMixClus}}, \code{\link{PoisMixClusWrapper}}}
 \examples{
 
 set.seed(12345)
@@ -56,21 +72,14 @@ simulate <- PoisMixSim(n = 200, libsize = "A", separation = "high")
 y <- simulate$y
 conds <- simulate$conditions
 
-## Run the PMM-II model for g = {3, 4, 5}
+## Run the PMM-II model for g = 3
 ## "TC" library size estimate, EM algorithm
-run <- PoisMixClus(y, gmin = 3, gmax = 5, lib.size = TRUE,
+run <- PoisMixClus(y, g = 3, lib.size = TRUE,
     lib.type = "TC", conds = conds, init.type = "small-em")
 
 ## Visualization of results (not run):
+## plot(run)
 
-## ICL results:
-## plot(run, cluster.choice = "ICL")
-
-## BIC results:
-## plot(run, cluster.choice = "BIC")
-
-## Results for cluster size = 5:
-## plot(run, cluster.choice = 5)
 
 }
 \keyword{methods}

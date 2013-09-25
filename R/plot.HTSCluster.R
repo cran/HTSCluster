@@ -1,55 +1,29 @@
 `plot.HTSCluster` <-
-function (x, cluster.choice = "ICL", file.name = FALSE, 
-graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), ...) 
+function (x, data, file.name = FALSE, 
+graphs = c("map", "map.bycluster", "lambda"), 
+lambda.plot = c("bar"), ...) 
 {
 	
     	if (class(x) != "HTSCluster") {
         	stop(paste(sQuote("x"), sep = ""), " must be of class ", 
             paste(dQuote("HTSCluster"), sep = ""), sep = "")
     	}
-	if(cluster.choice != "ICL" & cluster.choice != "BIC" & length(cluster.choice) > 1) {
-		stop(paste(sQuote("cluster.choice"), sep = ""), " must be one of ",
-			paste(dQuote("ICL"), sep = ""), " or ", paste(dQuote("BIC"), sep = ""), 
-			" or \n one of the cluster sizes run for object ", paste(sQuote("x"), sep = ""))
-	}
+#	if(cluster.choice != "ICL" & cluster.choice != "BIC" & length(cluster.choice) > 1) {
+#		stop(paste(sQuote("cluster.choice"), sep = ""), " must be one of ",
+#			paste(dQuote("ICL"), sep = ""), " or ", paste(dQuote("BIC"), sep = ""), 
+#			" or \n one of the cluster sizes run for object ", paste(sQuote("x"), sep = ""))
+#	}
 
-	data <- x$y; conds <- x$conds;
+	conds <- x$conds;
 	n <- nrow(data)
 	data.w <- data/rowSums(data)
-	BIC.all <- x$BIC.all
-	ICL.all <- x$ICL.all
-	labels.all <- x$labels
-	probaPost.all <- x$probaPost
-
-	if(cluster.choice == "ICL") {
-		probaPost <- x$probaPost.ICL
-		g <- x$g.ICL
-		labels <- x$labels.ICL
-		lambda <- x$lambda.ICL
-		pi <- x$pi.ICL
-	}
-	if(cluster.choice == "BIC") {
-		probaPost <- x$probaPost.BIC
-		g <- x$g.BIC
-		labels <- x$labels.BIC
-		lambda <- x$lambda.BIC
-		pi <- x$pi.BIC
-	}
-	if(is.numeric(cluster.choice) == TRUE) {
-		tmp <- names(x$BIC.all)
-		clust.nums <- as.numeric(lapply(strsplit(tmp, "="), function(x) x[2]))
-		index <- which(clust.nums == cluster.choice)
-		if(length(index) == 0) {
-			stop(paste(sQuote("cluster.choice"), sep = ""), " must be one of ",
-				paste(dQuote("ICL"), sep = ""), " or ", paste(dQuote("BIC"), sep = ""), 
-				" or \n one of the cluster sizes run for object ", paste(sQuote("x"), sep = ""))
-		}
-		probaPost <- x$probaPost[[index]]
-		g <- clust.nums[[index]]
-		labels <- x$labels[,index]
-		lambda <- x$lambda[[index]]
-		pi <- x$pi[[index]]
-	}
+	BIC <- x$BIC
+	ICL <- x$ICL
+	labels <- x$labels
+	probaPost <- x$probaPost
+	lambda <- x$lambda
+	pi <- x$pi
+	g <- length(pi)
 
 	## Plot dimensions
 	if(g > 36) {
@@ -71,21 +45,7 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 
 	if(file.name != FALSE) pdf(paste(file.name));
 
-	if(ncol(x$BIC.all) > 1 & "BIC.ICL" %in% graphs) {
-		par(mfrow = c(1,2), mar = c(4,4,2,2))
-		g.choice <- as.numeric(lapply(strsplit(colnames(x$BIC.all), "="), function(x) x[2]))
-		plot(g.choice, unlist(x$BIC.all), type = "l", main = "BIC", xlab = "Number of clusters",
-			ylab = "BIC")
-		points(g.choice, unlist(x$BIC.all))
-		points(x$g.BIC, x$BIC, pch = 19, col = "red", cex = 1.25)
-		plot(g.choice, unlist(x$ICL.all), type = "l", main = "ICL", xlab = "Number of clusters",
-			ylab = "ICL")
-		points(g.choice, unlist(x$ICL.all))
-		points(x$g.ICL, x$ICL, pch = 19, col = "red", cex = 1.25)
-	}
-
-
-	map <- apply(probaPost, 1, max)
+	map <- apply(matrix(probaPost, ncol=g), 1, max)
 	if("map" %in% graphs) {
 	## MAP histogram for all clusters
 	if(file.name == FALSE) par(ask = TRUE);
@@ -101,7 +61,7 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 	par(mfrow = c(1,1), mar = c(4,4,2,2), oma = c(2,1,2,0))
 	for(i in 1:g) {
 		if(sum(labels == i) > 1) {
-			map.clust <- apply(probaPost[labels == i,], 1, max)
+			map.clust <- apply(matrix(probaPost[labels == i,], ncol=g), 1, max)
 		}
 		if(sum(labels == i) == 1) {
 			map.clust <- max(probaPost[labels == i,])
@@ -113,7 +73,7 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 			boxplot(map.clust, at = 1, xlim = c(0.5,g+.5), col = "grey",
 				ylim = c(0,1), width = .35)
 		}
-		if(i > 1) {
+		if(i > 1 & is.na(map.clust[1]) == FALSE) {
 			boxplot(map.clust, at = i, col = "grey", add = TRUE, width = .35)
 		}
 	}
@@ -130,6 +90,13 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 		par(mfrow = plot.dim, mar = c(4,4,2,2), oma = c(1,1,2,0)) 
 		for(clus in 1:g) {
 	
+			if(sum(labels == clus) == 0) {
+				plot(c(0,1),c(0,1), col = "white", bty = "n", xaxt = "n",
+					yaxt = "n", xlab = "", ylab = "")
+				mtext(side = 3, paste("Cluster ", clus, sep = ""), line = 0, 
+					cex = 1)
+				next;
+			}
 			wh <- weighted.hist(data.w[,var], w = probaPost[,clus], 
 				breaks = 50, freq = F, plot = F)
 			breaks <- wh$breaks
@@ -202,7 +169,7 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 			", by cluster", sep = "")), cex = 1.25,
 			font = 2)
 	}
-	if(length(unique(conds)) > 2) {
+	if(length(unique(conds)) > 2 & lambda.plot == "stars") {
 
 		par(oma = c(3*dim(lambda)[1],0,0,0), mfrow = c(1,1))
 		lambda.scale <- t(lambda) / rowSums(t(lambda))
@@ -219,7 +186,31 @@ graphs = c("BIC.ICL", "map", "map.bycluster", "weighted.histograms", "lambda"), 
 			paste("Condition", unique(conds)), pch = 19)
 
 	}
-
+	if(length(unique(conds)) > 2 & lambda.plot == "pie") {
+		df <- data.frame(x = as.vector(lambda), lambda=rep(rownames(lambda),g),
+                 cluster = rep( paste("Cluster ", 1:g, "\npi = ", round(pi,2),  
+			"\n(", table(labels), " obs)", sep = ""),
+                   	each = nrow(lambda)))
+		df$cluster <- factor(df$cluster, 
+			levels = rep( paste("Cluster ", 1:g, "\npi = ", round(pi,2), 
+			"\n(", table(labels), " obs)", sep = "")))
+		levels(df$lambda) <- rownames(lambda)
+		gg <- ggplot(df, aes(x = lambda, fill = factor(lambda))) + 
+			geom_bar(aes(weight=x)) + theme(legend.position="none") +
+  			scale_fill_manual(name = "Group", values = rev(brewer.pal(nrow(lambda), "Set3"))) + 
+			facet_wrap(~cluster) + coord_polar() +
+  			labs(x = "", y = "") + theme_bw() + theme(axis.text.x = element_blank())
+		print(gg)
 	}
+	if(length(unique(conds)) > 2 & lambda.plot == "bar") {
+		s <- x$s
+		ss <- rep(NA, length(unique(conds))) 
+		for(c in 1:length(unique(conds))) {
+			ss[c] <- sum(s[which(conds == unique(conds)[c])])
+		}
+		barplot(lambda*ss, beside=FALSE, col=brewer.pal(length(unique(conds)), "Accent"), width = pi, legend.text = rownames(lambda),
+        		args.legend = list(x=1.2, y=-0.1, horiz=TRUE))
+	}
+      }
 	if(file.name != FALSE)  dev.off();
-}
+      }

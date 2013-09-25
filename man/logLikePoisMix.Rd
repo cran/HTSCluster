@@ -8,7 +8,7 @@ Calculate the log likelihood of a Poisson mixture model
 Functions to calculate the log likelihood of a Poisson mixture model, given a set of parameters, and the difference in log likelihoods for two different sets of parameters of a Poisson mixture model.
 }
 \usage{
-logLikePoisMix(y, mean, pi, smoothing = TRUE)
+logLikePoisMix(y, mean, pi)
 logLikePoisMixDiff(y, mean.new, pi.new, mean.old, pi.old)
 }
 \arguments{
@@ -20,8 +20,6 @@ List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditi
 }
   \item{pi}{
 Vector of length \emph{g} containing an estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
-}
-  \item{smoothing}{TRUE (default value) if smoothing should be used in calculation of log likelihood to avoid numerical problems
 }
   \item{mean.new}{
 List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditional mean expression for all observations for one set of parameters, as calculated by the \code{\link{PoisMixMean}} function, where \emph{g} represents the number of clusters
@@ -91,10 +89,10 @@ for(k in 1:g.true) {
 
 ## Run the PMM-II model for g = 4
 ## with EM algorithm and "TC" library size parameter
-run <- PoisMixClus(y, gmin = 4, gmax = 4, lib.size = TRUE, 
+run <- PoisMixClus(y, g = 4, lib.size = TRUE, 
    lib.type = "TC", conds = conds) 
-pi.est <- run$pi[[1]]
-lambda.est <- run$lambda[[1]]
+pi.est <- run$pi
+lambda.est <- run$lambda
 
 ## Mean values for each of the parameter sets
 mean.guess <- PoisMixMean(y, 4, conds, s, lambda.guess)
@@ -102,12 +100,12 @@ mean.est <- PoisMixMean(y, 4, conds, s, lambda.est)
 
 ## Log likelihood of each parameter set,
 ## and difference in log likelihoods
-LL.guess <- logLikePoisMix(y, mean.guess, pi.guess, smoothing = FALSE)$ll  
-LL.est <- logLikePoisMix(y, mean.est, pi.est, smoothing = FALSE)$ll         
+LL.guess <- logLikePoisMix(y, mean.guess, pi.guess)$ll  
+LL.est <- logLikePoisMix(y, mean.est, pi.est)$ll         
 LL.diff <- logLikePoisMixDiff(y, mean.guess, pi.guess, mean.est, pi.est)
 
-LL.guess - LL.est   ## -13474.95
-LL.diff             ## -13474.95
+LL.guess - LL.est   ## -12841.11
+LL.diff             ## -12841.11
 
 }
 \keyword{ methods }
