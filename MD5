@@ -1,7 +1,7 @@
-3097fbab2a0b388caf05f9cb31ef92ae *DESCRIPTION
+b07bf35fd252083e81fc08f6c5b9a415 *DESCRIPTION
 74b3897d2d54fd495a3b35aa51adcf13 *NAMESPACE
 166b20178a9d91503638956ddf62857f *R/HTSCluster-internal.R
-174f72f2b42fa45e6401a0217c1125a8 *R/PoisMixClus.R
+d48e3236636eb32d8aec8734b39b25f8 *R/PoisMixClus.R
 606c2c4f2819f7c6b89ef84cf88433d8 *R/PoisMixClusWrapper.R
 6ecf19c0388bf54502c6b16214063b3d *R/PoisMixMean.R
 f0e9bad82cdd1a43712f875607d58a9f *R/PoisMixSim.R
@@ -18,8 +18,8 @@ bd7bacf9cec430e9cfb2709a4464ff2b *R/splitEMInit.R
 324309f3f71a82d9be8553cfa97365ff *R/summary.HTSCluster.R
 88f0aabb24e02622d9dcaa998f09a6bd *R/summary.HTSClusterWrapper.R
 b4af73c63477a7a8b719e2da240b796a *inst/CITATION
-2bf4ad4e12e73d6b90a298c4ee036587 *inst/NEWS
-ef24146794f3b1cc85f5e3a745cef06d *man/HTSCluster-package.Rd
+25350f42c1c13a2705fd1e2ed64b748c *inst/NEWS
+9d7d2bb5db08f480b1f3d099d0afc520 *man/HTSCluster-package.Rd
 d48e4b3fd63079c65ec938a176cb302f *man/Init.Rd
 4299a8174290ec186c209f0ce3487e3b *man/PoisMixClus.Rd
 2e521ea4553688b0ec71a18b7401c0bd *man/PoisMixMean.Rd

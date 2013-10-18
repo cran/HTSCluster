@@ -2,6 +2,8 @@
                 RELEASE HISTORY OF HTSCluster PACKAGE
              ========================================
 
+		CHANGES IN HTSCluster VERSION 2.0.1
+- Changed entropy calculation for ICL from -2*sum*(z*log(t)) to -2*sum(t*log(t)).
 
 		CHANGES IN HTSCluster VERSION 1.99.0
 
