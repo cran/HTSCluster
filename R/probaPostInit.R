@@ -211,7 +211,7 @@ probaPostInit <- function(y, g, conds, lib.size, lib.type,
 
 	if(min(pi) > 0 | is.nan(sum(lambda)) == FALSE) {
 		mean.calc <- PoisMixMean(y, g = K, conds, s, lambda)
-		LL.tmp <- logLikePoisMix(y, mean.calc, pi)
+		LL.tmp <- mylogLikePoisMix(y, mean.calc, pi)
 		LL <- LL.tmp$ll
 	}
 	results <- list(lambda = lambda.final, pi = pi.final, log.like = LL)

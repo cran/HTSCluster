@@ -1,25 +1,19 @@
-\name{logLikePoisMix}
-\alias{logLikePoisMix}
+\name{logLikePoisMixDiff}
 \alias{logLikePoisMixDiff}
+\alias{mylogLikePoisMixObs}
 \title{
-Calculate the log likelihood of a Poisson mixture model
+Calculate the difference in log likelihood of two Poisson mixture models or the log-likelihood for each observation
 }
 \description{
-Functions to calculate the log likelihood of a Poisson mixture model, given a set of parameters, and the difference in log likelihoods for two different sets of parameters of a Poisson mixture model.
+Function to calculate the difference in log likelihoods for two different sets of parameters of a Poisson mixture model or the log-likelihood for each observation.
 }
 \usage{
-logLikePoisMix(y, mean, pi)
 logLikePoisMixDiff(y, mean.new, pi.new, mean.old, pi.old)
+mylogLikePoisMixObs(y, conds, s, lambda, pi)
 }
 \arguments{
   \item{y}{
 (\emph{n} x \emph{q}) matrix of observed counts for \emph{n} observations and \emph{q} variables
-}
-  \item{mean}{
-List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditional mean expression for all observations as calculated by the \code{\link{PoisMixMean}} function, where \emph{g} represents the number of clusters
-}
-  \item{pi}{
-Vector of length \emph{g} containing an estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
 }
   \item{mean.new}{
 List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditional mean expression for all observations for one set of parameters, as calculated by the \code{\link{PoisMixMean}} function, where \emph{g} represents the number of clusters
@@ -33,13 +27,27 @@ Vector of length \emph{g} containing one estimate for \eqn{\hat{\ensuremath\bold
   \item{pi.old}{
 Vector of length \emph{g} containing another estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
 }
+  \item{pi}{
+Vector of length \emph{g} containing estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
+}
+  \item{conds}{
+Vector of length \emph{q} defining the condition (treatment group) for each variable (column) in \code{y}
+}
+  \item{s}{
+Estimate of normalized per-variable library size
+}
+  \item{lambda}{
+(\emph{d} x \code{g}) matrix containing the current estimate of lambda, where \emph{d} is the number of conditions (treatment groups) and \code{g} is the number of clusters
+}
 }
 \details{
-The \code{logLikePoisMix} function calculates the log likelihood for a given set of parameters in a Poisson mixture model and is used in the \code{\link{PoisMixClus}} function for the calculation of the BIC and ICL. The \code{logLikePoisMixDiff} function is used to calculate the difference in log likelihood for two different sets of parameters in a Poisson mixture model; it is used to determine convergence in the EM algorithm run by the \code{\link{PoisMixClus}} function.
+The \code{logLikePoisMixDiff} function is used to calculate the difference in log likelihood for two different sets of parameters in a Poisson mixture model; it is used to determine convergence in the EM algorithm run by the \code{\link{PoisMixClus}} function.
+The \code{mylogLikePoisMix} function from the \code{poisson.glm.mix} R package calculates the log likelihood for a given set of parameters in a Poisson mixture model and is used in the \code{\link{PoisMixClus}} function for the calculation of the BIC and ICL. 
+The \code{mylogLikePoisMixObs} function calculates the log likelihood per observation for a given set of parameters in a Poisson mixture model. 
 }
 
 \value{
-\item{ll }{Log likelihood for a given set of parameters (\code{logLikePoisMix} function) or difference in log likelihoods for two different sets of parameters (in the case of the \code{logLikePoisMixDiff} function)}
+\item{ll }{Difference in log likelihoods for two different sets of parameters, or per-observation log-likelihood}
 }
 \note{
 In the \code{logLikePoisMixDiff} function, we make use of the alternative mass function for a Poisson density proposed by Loader (2000) to avoid computational difficulties. The \code{logLikePoisMixDiff} function returns a default value of 100 if one or both of the log likelihoods associated with the two parameter sets takes on a value of \eqn{-\infty}{-\infty}.
@@ -98,13 +106,8 @@ lambda.est <- run$lambda
 mean.guess <- PoisMixMean(y, 4, conds, s, lambda.guess)
 mean.est <- PoisMixMean(y, 4, conds, s, lambda.est)
 
-## Log likelihood of each parameter set,
-## and difference in log likelihoods
-LL.guess <- logLikePoisMix(y, mean.guess, pi.guess)$ll  
-LL.est <- logLikePoisMix(y, mean.est, pi.est)$ll         
+## Difference in log likelihoods       
 LL.diff <- logLikePoisMixDiff(y, mean.guess, pi.guess, mean.est, pi.est)
-
-LL.guess - LL.est   ## -12841.11
 LL.diff             ## -12841.11
 
 }

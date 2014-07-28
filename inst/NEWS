@@ -2,7 +2,28 @@
                 RELEASE HISTORY OF HTSCluster PACKAGE
              ========================================
 
+			 		CHANGES IN HTSCluster VERSION 2.0.3
+		
+- Fixed typo in calculation of entropy for ICL (thanks to M. Gallopin)
+- Added mylogLikePoisMixObs function to calculate log-likelihood for each 
+  observation.
+- Default number of init.runs now fixed at 1
+- Added EM.verbose option to include more informative output about the algorithm
+- Added iterations and logLikeDiff into the output of the PoisMixClus and
+  PoisMixClusWrapper functions.
+  
+		CHANGES IN HTSCluster VERSION 2.0.2
+		
+- Added poisson.glm.mix to package IMPORTS to use the function mylogLikePoisMix
+  for all likelihood calculations in order to avoid numerical difficulties (and
+  deleted logLikePoisMix from the PoisMixClus and probaPostInit functions).
+- Set up initial file for vignette.
+- Changed splitSmallEM initializing strategy so as to split the cluster with the
+  largest per-cluster entropy (-sum_{i \in k} \log(t_{ik}) rather than randomly
+  choosing a cluster to split.
+					
 		CHANGES IN HTSCluster VERSION 2.0.1
+		
 - Changed entropy calculation for ICL from -2*sum*(z*log(t)) to -2*sum(t*log(t)).
 
 		CHANGES IN HTSCluster VERSION 1.99.0

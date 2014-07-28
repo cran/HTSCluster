@@ -1,8 +1,8 @@
 PoisMixClusWrapper <- function(y, gmin = 1, gmax, conds, lib.size = TRUE, lib.type = "TMM", 
-	gmin.init.type = "small-em", init.runs = 20, init.iter = 10, split.init = TRUE, 
+	gmin.init.type = "small-em", init.runs = 1, init.iter = 10, split.init = TRUE, 
 	alg.type = "EM", cutoff = 10e-6, iter = 1000, 
 	fixed.lambda = NA, equal.proportions = FALSE, verbose = FALSE,
-	interpretation = "sum") 
+	interpretation = "sum", EM.verbose = FALSE) 
 {
 	all.results <- vector("list", length = gmax - gmin + 1)
 	names(all.results) <- paste("g=", seq(gmin,gmax, 1), sep = "")
@@ -15,9 +15,10 @@ PoisMixClusWrapper <- function(y, gmin = 1, gmax, conds, lib.size = TRUE, lib.ty
 		alg.type = alg.type, cutoff = cutoff, iter = iter, 
 		fixed.lambda = fixed.lambda, equal.proportions = equal.proportions, 
 		prev.labels = NA, prev.probaPost = NA, verbose = verbose,
-		interpretation = interpretation)
+ interpretation = interpretation,
+		EM.verbose = EM.verbose)
 
-	## For g > gmin, run PoisMixClus with Panos init using previous results
+	## For g > gmin, run PoisMixClus with Panos-like init using previous results
 	index <- 2
 	if(gmax > gmin) {
 		if(split.init == TRUE) {
@@ -33,7 +34,7 @@ PoisMixClusWrapper <- function(y, gmin = 1, gmax, conds, lib.size = TRUE, lib.ty
 					equal.proportions = equal.proportions, 
 					prev.labels = prev.labels, prev.probaPost = prev.probaPost,
 					init.runs = init.runs, init.iter = init.iter, verbose = verbose,
-					interpretation = interpretation)
+										interpretation = interpretation, EM.verbose = EM.verbose)
 				index <- index + 1
 			}
 		}
@@ -47,7 +48,8 @@ PoisMixClusWrapper <- function(y, gmin = 1, gmax, conds, lib.size = TRUE, lib.ty
 					fixed.lambda = fixed.lambda, 
 					equal.proportions = equal.proportions, 
 					prev.labels = NA, prev.probaPost = NA, init.runs = init.runs,
-					init.iter = init.iter, verbose = verbose, interpretation = interpretation)
+					init.iter = init.iter, verbose = verbose, interpretation = interpretation,
+					EM.verbose = EM.verbose)
 				index <- index + 1
 			}
 		}

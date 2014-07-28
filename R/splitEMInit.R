@@ -10,43 +10,34 @@ splitEMInit <- function(y, g, conds, lib.size,
 	n <- dim(y)[1]
 	unique.labels <- unique(prev.labels)
 	## Check whether any of the clusters has one or zero observations & remove from consideration
-	tab <- table(prev.labels)
+	tab <- table(prev.labels) 
+	## Fix to make sure that we only consider clusters with at least 2 observations
+	unique.labels <- names(tab)
 	if(length(which(tab < 2)) > 0) {
-		unique.labels <- names(tab)
+		unique.labels <- names(tab)[-which(tab < 2)]
 	}
-	
+
 	K <- g
 	if(class(fixed.lambda) == "list") {
 		K <- g + length(fixed.lambda);	
-	}
-
-
-	if(init.runs < 1) {
-		cat("Exhaustive search is implemented.\n")
-		m <- length(unique(prev.labels))
-	}
-	if(init.runs > 0) m <- init.runs;
-#	if(init.runs >= K) m <- K - 1;
-	psim <- matrix(NA, nrow = m, ncol = K)
+	}	
 	prev.K <- K - 1
 	
-	LL.all <- rep(NA, m)
-	init.all <- vector("list", m)
-
-	for(iter in 1:m) {
-		if(verbose == TRUE) cat("Split small-em run:", iter, "\n");
-
-		## Randomly choose a cluster to split
-		if(init.runs < 1) {
-			cluster.choose <- unique(prev.labels)[iter]
-			index1 <- which(prev.labels == cluster.choose)
-		}
-		if(init.runs > 1) {
-			cluster.choose <- floor(runif(1)*(K-1)+1)
-			index1 <- which(prev.labels == cluster.choose)
-		}
-
-		## Random selection of observations within splitted component
+	## Calculate per-class entropy of previous model
+	## and choose cluster with largest entropy to split
+	perEntropy <- rep(NA, length(unique.labels))
+	names(perEntropy) <- unique.labels
+	for(k in 1:length(unique.labels)) {
+		perEntropy[k] <- -sum(log(prev.probaPost[which(prev.labels == as.numeric(unique.labels[k])),as.numeric(unique.labels[k])]))
+	}
+	cluster.choose <- as.numeric(unique.labels[which(perEntropy == max(perEntropy))])
+	index1 <- which(prev.labels == cluster.choose)
+	
+	## Random selection of observations within splitted component
+	## Repeat this init.runs times
+	LL.all <- rep(NA, init.runs)
+	init.all <- vector("list", init.runs)
+	for(iter in 1:init.runs) {
 		u.numbers <- runif(length(index1))
 		t <- matrix(0, nrow = n, ncol = K)
 		t[,1:prev.K] <- prev.probaPost
@@ -55,12 +46,12 @@ splitEMInit <- function(y, g, conds, lib.size,
 
 		## Smoothing t values
 		epsilon <- 1e-10
-    		maxcut <- 1 - epsilon; mincut <- epsilon
-   		t <- apply(t, 2, pmax, mincut)
-   		t <- apply(t, 2, pmin, maxcut)
+		maxcut <- 1 - epsilon; mincut <- epsilon
+		t <- apply(t, 2, pmax, mincut)
+		t <- apply(t, 2, pmin, maxcut)
 		t <- t/rowSums(t)
 
-		## Initialize EM-algorithm with new z values
+		## Initialize small EM-algorithm with new z values
 		initialize <- probaPostInit(y = y, g = g, lib.size = lib.size,
 			lib.type = lib.type, conds = conds, alg.type = alg.type,
 			fixed.lambda = fixed.lambda,

@@ -1,0 +1,65 @@
+%\VignetteIndexEntry{Co-expression analysis of RNA-seq data with the "HTSCluster" package}
+%\VignettePackage{HTSCluster}
+
+% To compile this document
+% library('cacheSweave');rm(list=ls());Sweave('HTSCluster.Rnw',driver=cacheSweaveDriver());system("pdflatex HTSCluster")
+
+\documentclass[10pt,oneside]{article}
+\usepackage{natbib}
+
+\newcommand{\thetitle}{Co-expression analysis of RNA-seq data with the HTSCluster package}
+\usepackage{whbiocvignette}
+
+\title{\textsf{\textbf{\thetitle}}}
+\author{Andrea Rau$^1$, Cathy Maugis-Rabusseau, Marie-Laure Martin-Magniette, and Gilles Celeux\\[1em]
+\texttt{$^1$andrea.rau@jouy.inra.fr}}
+
+% The following command makes use of SVN's 'Date' keyword substitution
+% To activate this, I used: svn propset svn:keywords Date HTSCluster.Rnw
+\date{\Rpackage{HTSCluster} version \Sexpr{packageDescription("HTSCluster")$Version}}
+
+\SweaveOpts{keep.source=TRUE,eps=FALSE,pdf=FALSE,png=TRUE,include=FALSE,width=5.4,height=3.7,resolution=180}
+
+\begin{document}
+<<options,results=hide,echo=FALSE>>=
+options(digits=3, width=100)
+@
+
+\maketitle
+
+\begin{abstract}
+This vignette explains the use of the \Rpackage{HTSCluster} package. 
+For a presentation of the statistical method, please see our paper.
+\end{abstract}
+
+\tableofcontents
+
+%--------------------------------------------------
+\section{Input data} \label{sec:prep}
+%--------------------------------------------------
+
+In this vignette, we will work with the gene level read counts from
+the \Rpackage{...} data package.
+
+%------------------------------------------------------------
+\section{Inference: Identifying co-expressed genes} \label{sec:inference}
+%------------------------------------------------------------
+To be completed.
+
+%\clearpage
+%------------------------------------------------------------
+\section{Further reading}\label{sec:further}
+%------------------------------------------------------------
+
+For more information on the statistical method, see \citep{Rau2014}.
+
+\section{Session Info}
+<<sessi>>=
+sessionInfo()
+@
+
+\bibliographystyle{unsrt}
+\bibliography{HTSCluster}
+
+
+\end{document}

@@ -1,8 +1,8 @@
 
 PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",  
-	init.type = "small-em", init.runs = 20, init.iter = 10, alg.type = "EM", cutoff = 10e-6, 
+	init.type = "small-em", init.runs = 1, init.iter = 10, alg.type = "EM", cutoff = 10e-6, 
 	iter = 1000, fixed.lambda = NA, equal.proportions = FALSE, prev.labels = NA, 
-	prev.probaPost = NA, verbose = FALSE, interpretation = "sum") {
+	prev.probaPost = NA, verbose = FALSE, interpretation = "sum", EM.verbose = FALSE) {
 
 	## fixed.lambda should be a list of length (number of fixed clusters)
 	## g gives the number of clusters IN ADDITION to the fixed clusters
@@ -130,7 +130,7 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 			fixed.lambda = fixed.lambda,
 			equal.proportions = equal.proportions, 
 			prev.labels = prev.labels, prev.probaPost = prev.probaPost,
-			init.runs = init.runs, init.iter = init.iter, verbose = verbose)
+			init.iter = init.iter, init.runs = init.runs, verbose = verbose)
 	}
 	param.init <- do.call(init.alg, init.args)
 
@@ -244,6 +244,13 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 		if(diff < cutoff) go <- 0;
 		if(iter != FALSE & iter == index) go <- 0;
 	}
+	
+	if(EM.verbose == TRUE) {
+		cat("#####################################\n")
+		cat("Number of EM iterations:", index, "\n")
+		cat("Last log-likelihood difference:", diff, "\n")
+		cat("#####################################\n")
+	}
 
 	#####################################
 	## Final estimates of lambda and p ##
@@ -265,7 +272,7 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 	if(min(pi) > 0 | is.nan(sum(lambda)) == FALSE) {
 
 		mean.calc <- PoisMixMean(y, g = K, conds, s, lambda)
-		LL.tmp <- logLikePoisMix(y, mean.calc, pi)
+		LL.tmp <- mylogLikePoisMix(y, mean.calc, pi)
 		LL <- LL.tmp$ll
 	
 		######################
@@ -308,7 +315,9 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 		BIC <- -LL + (np/2) * log(n)
 #		entropy <- -2*sum(z*log(t), na.rm = TRUE)
 		## CHANGE October 18, 2013: replace z with t in the entropy calculation for ICL
-		entropy <- -2*sum(t*log(t), na.rm = TRUE)
+#		entropy <- -2*sum(t*log(t), na.rm = TRUE)
+		## CHANGE July 25, 2014: typo in entropy (thanks, Melina Gallopin!)
+		entropy <- -sum(t*log(t), na.rm = TRUE)
 		ICL <- BIC + entropy
 	}
 	## Should cluster behavior (lambda) be interpretated wrt the gene means or sums?	
@@ -319,9 +328,8 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 	results <- list(lambda = lambda.final, pi = pi.final, labels = labels, 
 		probaPost = probaPost, log.like = LL, BIC = -BIC, ICL = -ICL, 
 		alg.type = alg.type, lib.size = lib.size, lib.type = lib.type, s = s,
-		conds = conds)
+		conds = conds, iterations = index, logLikeDiff = diff)
 
 	class(results) <- "HTSCluster"
 	return(results)
-
 }

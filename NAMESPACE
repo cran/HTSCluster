@@ -1,6 +1,5 @@
 export(emInit)
 export(kmeanInit)
-export(logLikePoisMix)
 export(logLikePoisMixDiff)
 export(PoisMixClus)
 export(PoisMixClusWrapper)
@@ -14,6 +13,7 @@ import(plotrix)
 
 ## import methods
 importFrom(edgeR, calcNormFactors)
+importFrom(poisson.glm.mix, mylogLikePoisMix)
 
 import(ggplot2)
 import(RColorBrewer)

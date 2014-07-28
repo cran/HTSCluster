@@ -48,8 +48,7 @@ Algorithm to be used for parameter estimation (\dQuote{\code{EM}} or \dQuote{\co
 }
   \item{init.runs}{
 In the case of the Small-EM algorithm, the number of independent runs to be performed.
-In the case of the splitting Small-EM algorithm, the number of cluster splits to be performed in the splitting small-EM initialization. For values less than 1, 
-an exhaustive set of splits (i.e., splitting each of the \code{g} clusters one time) is performed
+In the case of the splitting Small-EM algorithm, the number of cluster splits to be performed in the splitting small-EM initialization. 
 }
   \item{init.iter}{
 The number of iterations to run within each Small-EM algorithm
@@ -82,8 +81,8 @@ for a single number of clusters through the \code{PoisMixClus} function (via \co
 
 To initialize parameter values for the EM and CEM algorithms, for the Small-EM strategy (Biernacki et al., 2003) we use the \code{emInit} function as follows. For a given number of independent runs (given by \code{init.runs}), the following procedure is used to obtain parameter values: first, a K-means algorithm (MacQueen, 1967) is run to partition the data into \code{g} clusters (\eqn{\hat{\ensuremath\boldsymbol{z}}^{(0)}}{\hat{z}^(0)}). Second, initial parameter values \eqn{\ensuremath\boldsymbol{\pi}^{(0)}}{\pi^(0)} and \eqn{\ensuremath\boldsymbol{\lambda}^{(0)}}{\lambda^(0)} are calculated (see Rau et al. (2011) for details). Third, a given number of iterations of an EM algorithm are run (defined by \code{init.iter}), using \eqn{\ensuremath\boldsymbol{\pi}^{(0)}}{\pi^(0)} and \eqn{\ensuremath\boldsymbol{\lambda}^{(0)}}{\lambda^(0)} as initial values. Finally, among the \code{init.runs} sets of parameter values, we use \eqn{\hat{\ensuremath\boldsymbol{\lambda}}}{\hat{\lambda}} and \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}} corresponding to the highest log likelihood or completed log likelihood to initialize the subsequent full EM or CEM algorithms, respectively.
 
-For the splitting small EM initialization strategy, we implement the approach described in Papastamoulis et al. (2012),
-where a cluster from a previous run (with \emph{g}-1 clusters) is randomly chosen to be split into two new clusters,
+For the splitting small EM initialization strategy, we implement an approach similar to that described in Papastamoulis et al. (2012),
+where the cluster from the previous run (with \emph{g}-1 clusters) with the largest entropy is chosen to be split into two new clusters,
 followed by a small EM run as described above.
 }
 \value{

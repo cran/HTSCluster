@@ -9,16 +9,18 @@ These functions implement the EM and CEM algorithms for parameter estimation in 
 }
 \usage{
 PoisMixClus(y, g, conds, lib.size = TRUE, lib.type = "TMM", 
-    init.type = "small-em", init.runs = 20, init.iter = 10,
+    init.type = "small-em", init.runs = 1, init.iter = 10,
     alg.type = "EM", cutoff = 10e-6, iter = 1000, fixed.lambda = NA,
     equal.proportions = FALSE, prev.labels = NA, 
-    prev.probaPost = NA, verbose = FALSE, interpretation = "sum")
+    prev.probaPost = NA, verbose = FALSE, interpretation = "sum",
+	EM.verbose = FALSE)
 
 PoisMixClusWrapper(y, gmin = 1, gmax, conds, lib.size = TRUE,
     lib.type = "TMM", gmin.init.type = "small-em",
-    init.runs = 20, init.iter = 10, split.init = TRUE, alg.type = "EM", 
+    init.runs = 1, init.iter = 10, split.init = TRUE, alg.type = "EM", 
     cutoff = 10e-6, iter = 1000, fixed.lambda = NA, 
-    equal.proportions = FALSE, verbose = FALSE, interpretation = "sum")
+    equal.proportions = FALSE, verbose = FALSE, interpretation = "sum",
+	EM.verbose = FALSE)
 }
 
 \arguments{
@@ -55,7 +57,7 @@ Type of initialization strategy to be used for the minimum number of clusters in
 (\dQuote{\code{small-em}} for the Small-EM strategy described in Rau et al. (2011), and \dQuote{\code{kmeans}} for a simple \emph{K}-means initialization)
 }
   \item{init.runs}{
-Number of iterations to be used for the Small-EM strategy described in Rau et al. (2011), with a default value of 20
+Number of iterations to be used for the Small-EM strategy described in Rau et al. (2011), with a default value of 1
 }
   \item{init.iter}{
 Number of iterations to be used within each run for the Small-EM strategry, with a default value of 10
@@ -97,6 +99,10 @@ If \code{TRUE}, include verbose output
 If \code{"sum"}, cluster behavior is interpreted with respect to overall gene expression level (sums per gene), 
 otherwise for \code{"mean"}, cluster behavior is interpreted with respect to mean gene expression (means per gene).
 }
+  \item{EM.verbose}{
+If \code{TRUE}, more informative output is printed about the EM algorithm, including the number of iterations run and
+the difference between log-likelihoods at the last and penultimate iterations.
+}
 }
 \details{
 Output of \code{PoisMixClus} is an S3 object of class \code{HTSCluster}, and output of \code{PoisMixClusWrapper} is an S3 object
@@ -129,6 +135,8 @@ There are two approaches to estimating the parameters of a finite mixture model 
 \item{lib.type }{Type of library size normalization used (if \code{lib.size = TRUE}; matches the argument \code{lib.type} above)}
 \item{s }{Library size normalization factors used (if \code{lib.size = TRUE})}
 \item{conds }{Conditions specified by user}
+\item{iterations }{Number of iterations run}
+\item{logLikeDiff }{Difference in log-likelihood between the last and penultimate iterations of the algorithm}
 \item{loglike.all }{Log likelihoods calculated for each of the fitted models for cluster sizes \code{gmin}, ..., \code{gmax}}
 \item{ICL.all }{ICL values calculated for each of the fitted models for cluster sizes \code{gmin}, ..., \code{gmax}}
 \item{select.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the ICL criterion}
@@ -149,7 +157,7 @@ Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
 \seealso{
 \code{\link{probaPost}} for the calculation of the conditional probability of belonging to a cluster;
 \code{\link{PoisMixMean}} for the calculation of the per-cluster conditional mean of each observation;
-\code{\link{logLikePoisMix}} for the calculation of the log likelihood of a Poisson mixture model;
+\code{\link{logLikePoisMixDiff}} for the calculation of the log likelihood of a Poisson mixture model;
 \code{\link{emInit}} and \code{\link{kmeanInit}} for the Small-EM parameter initialization strategy
 }
 \examples{
