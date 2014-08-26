@@ -2,7 +2,17 @@
                 RELEASE HISTORY OF HTSCluster PACKAGE
              ========================================
 
-			 		CHANGES IN HTSCluster VERSION 2.0.3
+		CHANGES IN HTSCluster VERSION 2.0.4
+		
+- Minor changes to speed up code in logLikePoisMixDiff, PoisMixMean,
+  probaPost, and PoisMixClus and avoiding recalculating library sizes multiple 
+  times across several functions, as well as improving compile time for Init Rd file.
+- Import capushe package and added capushe results and plotting capabilities for
+  PoisMixClusWrapper, and removed ggplot2 and RColorBrewer dependencies.
+- Completed vignette.
+- Minor change to summary function for PoisMixClusWrapper objects.
+
+		CHANGES IN HTSCluster VERSION 2.0.3
 		
 - Fixed typo in calculation of entropy for ICL (thanks to M. Gallopin)
 - Added mylogLikePoisMixObs function to calculate log-likelihood for each 

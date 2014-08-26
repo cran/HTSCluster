@@ -16,7 +16,7 @@ A function to summarize the clustering results obtained from a Poisson mixture m
 \details{
 The summary function for an object of class \code{"HTSCluster"} provides the following summary of results:
 
-1) Number of clusters, BIC, and ICL values.
+1) Number of clusters and model selection criterion used, if applicable.
 
 2) Number of observations across all clusters with a maximum conditional probability
 greater than 90% (and corresponding percentage of total observations) for the selected
@@ -32,11 +32,8 @@ selected model.
 
 
 
-The summary function for an object of class \code{"HTSClusterWrapper"} provides the following summary of results:
-
-1) The ICL value and number of clusters for the chosen model.
-
-2) The ICL values associated to each number of clusters for all fitted models.
+The summary function for an object of class \code{"HTSClusterWrapper"} provides the number of clusters selected for
+the BIC, ICL, DDSE, and Djump model selection approaches.
 }
 
 \references{

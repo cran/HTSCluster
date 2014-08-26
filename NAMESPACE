@@ -9,14 +9,14 @@ export(probaPost)
 export(probaPostInit)
 export(splitEMInit)
 export(highDimensionARI)
-import(plotrix)
+export(HTSClusterUsersGuide)
+import(capushe)
 
 ## import methods
 importFrom(edgeR, calcNormFactors)
 importFrom(poisson.glm.mix, mylogLikePoisMix)
+importFrom(plotrix, weighted.hist)
 
-import(ggplot2)
-import(RColorBrewer)
 S3method(plot, HTSCluster)
 S3method(summary, HTSCluster)
 S3method(summary, HTSClusterWrapper)

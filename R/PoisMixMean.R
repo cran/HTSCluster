@@ -23,13 +23,8 @@ w <- rowSums(y)
 mean.mat <- vector("list", g)
 w.mat <- matrix(rep(w, times = cols), nrow = n, ncol = cols)
 s.mat <- matrix(rep(s, each = n), nrow = n, ncol = cols)
-for(k in 1:g) {
-mean.mat[[k]] <- matrix(NA, nrow = n, ncol = cols)
-lambda.mat <- matrix(rep(rep(lambda[,k], times = r), each = n),
-nrow = n, ncol = cols)
-tmp <- w.mat * s.mat * lambda.mat
-mean.mat[[k]] <- tmp
-}
+mean.mat <- lapply(1:g, function(x)
+	.myloopfxn(x, lambda=lambda, w.mat=w.mat, s.mat=s.mat, r=r, n=n, cols=cols))
 return(mean.mat)
 }
 

@@ -6,24 +6,23 @@
 A function to visualize the clustering results obtained from a Poisson mixture model.
 }
 \usage{
-\method{plot}{HTSCluster}(x, data, file.name = FALSE, 
-    graphs = c("map", "map.bycluster", "lambda"), 
-    lambda.plot = c("bar"), ...)
+\method{plot}{HTSCluster}(x, file.name = FALSE, 
+    graphs = c("map", "map.bycluster", "lambda"), data=NA, ...)
 \method{plot}{HTSClusterWrapper}(x, file.name = FALSE,
-    graphs = c("ICL", "BIC"), ...)
+    graphs = c("capushe", "ICL", "BIC"), capushe.validation=NA, ...)
 }
 \arguments{
   \item{x}{ An object of class \code{"HTSCluster"} or \code{"HTSClusterWrapper"}}
-  \item{data}{
-(\emph{n} x \emph{q}) matrix of observed counts for \emph{n} observations and \emph{q} variables
-}
   \item{file.name}{ Optional file name if plots are to be saved in a PDF file.}
   \item{graphs}{ Type of graph to be included in plots. May be equal to
   \code{"map"}, \code{"may.bycluster"}, \code{"weighted.histograms"}, and/or \code{"lambda"} for objects
   of class \code{"HTSCluster"} and \code{c("ICL", "BIC")} for objects of class
   \code{"HTSClusterWrapper"}}
-  \item{lambda.plot}{ Type of plot to be used for the \code{lambda} plot, \code{"bar"} (default),
-	\code{"pie"} or \code{"stars"}}
+  \item{capushe.validation}{ Optional number of clusters to use for capushe validation (should be less than the maximum number of clusters
+specificed in the \code{"HTSClusterWrapper"} object).}
+  \item{data}{
+(\emph{n} x \emph{q}) matrix of observed counts for \emph{n} observations and \emph{q} variables (only required for the plotting of weighted histograms)
+}
   \item{...}{Additional arguments (mainly useful for plotting)}
 }
 \details{
@@ -40,17 +39,16 @@ Poisson mixture model are overlaid in red.
 
 4) A global view of \eqn{\ensuremath\boldsymbol{\lambda}}{\lambda} and \eqn{\ensuremath\boldsymbol{\pi}}{\pi} values for the selected model. When the
 number of conditions <= 2, bar heights represent the value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} for each
-cluster, and bar width corresponds to the value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}. When the number of
-conditions > 2, either bar, pie or star plots are drawn for each cluster to illustrate the relative
-value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} in each condition, where for the star plots, half-circle radiuses reflect the corresponding
-value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}.
+cluster, and bar width corresponds to the value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}. 
 
 
-For objects of class \code{"HTSClusterWrapper"}, the plotting function provides the possibility for one or both of the following visualizations:
+For objects of class \code{"HTSClusterWrapper"}, the plotting function provides the possibility for one or all of the following visualizations:
 
 1) ICL plot for all fitted models.
 
 2) BIC plot for all fitted models.
+
+5) Capushe diagnostic plots.
 }
 
 \references{

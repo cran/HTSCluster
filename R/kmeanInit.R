@@ -1,5 +1,5 @@
 kmeanInit <- function(y, g, conds, lib.size, lib.type, fixed.lambda,
-	equal.proportions) {
+	equal.proportions, s=NA) {
 
 	if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
 		stop(paste(sQuote("y"), "must be a matrix"))
@@ -21,24 +21,26 @@ kmeanInit <- function(y, g, conds, lib.size, lib.type, fixed.lambda,
 	d <- length(unique(conds))
 	r <- as.vector(table(conds))
 	w <- rowSums(y)
-	if(lib.size == FALSE) {
-		s <- rep(1, cols)
-	}
-	if(lib.size == TRUE) {
-		if(lib.type == "TC") s <- colSums(y) / sum(y);
-		if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
-		if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
-		if(lib.type == "DESeq") {
-			## Code from DESeq, v1.8.3
-			loggeomeans <- rowMeans(log(y))
-			s <- apply(y, 2, function(x) 
-				exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
-			s <- s / sum(s)
+	if(is.na(s[1]) == TRUE) {
+		if(lib.size == FALSE) {
+			s <- rep(1, cols)
 		}
-		if(lib.type == "TMM") {
-			f <- calcNormFactors(as.matrix(y), method = "TMM")
-			s <- colSums(y)*f / sum(colSums(y)*f)
-		} 
+		if(lib.size == TRUE) {
+			if(lib.type == "TC") s <- colSums(y) / sum(y);
+			if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
+			if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
+			if(lib.type == "DESeq") {
+				## Code from DESeq, v1.8.3
+				loggeomeans <- rowMeans(log(y))
+				s <- apply(y, 2, function(x) 
+					exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
+				s <- s / sum(s)
+			}
+			if(lib.type == "TMM") {
+				f <- calcNormFactors(as.matrix(y), method = "TMM")
+				s <- colSums(y)*f / sum(colSums(y)*f)
+			} 
+		}
 	}
 	s.dot <- rep(NA, d) 
 	for(j in 1:d) {
@@ -57,7 +59,7 @@ kmeanInit <- function(y, g, conds, lib.size, lib.type, fixed.lambda,
 	for(j in 1:d) {
 		denom.bis <- denom * s.dot[j]
 		num <- colSums(partition.mat *
-		rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])))
+			rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])))
 		lambda.init[j,] <- num / denom.bis
 	}
 	if(class(fixed.lambda) == "list") {

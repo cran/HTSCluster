@@ -12,18 +12,19 @@ These functions implement a variety of initialization methods for the parameters
 \usage{
 
 emInit(y, g, conds, lib.size, lib.type, alg.type = "EM", 
-    init.runs, init.iter, fixed.lambda, equal.proportions, verbose)
+    init.runs, init.iter, fixed.lambda, equal.proportions, verbose,
+	s=NA)
 
 kmeanInit(y, g, conds, lib.size, lib.type, fixed.lambda,
-    equal.proportions)
+    equal.proportions, s=NA)
 
 splitEMInit(y, g, conds, lib.size, lib.type, alg.type, fixed.lambda,
     equal.proportions, prev.labels, prev.probaPost, init.runs, 
-    init.iter, verbose)
+    init.iter, verbose, s=NA)
 
 probaPostInit(y, g, conds, lib.size, lib.type, alg.type = "EM", 
     fixed.lambda, equal.proportions, probaPost.init, init.iter,
-    verbose)
+    verbose, s=NA)
 
 }
 \arguments{
@@ -72,6 +73,9 @@ An \emph{n} x (\emph{g}) matrix of the conditional probabilities of each observa
 }
   \item{verbose}{
 If \code{TRUE}, include verbose output
+}
+  \item{s}{
+Estimate of normalized per-variable library size. If NA, these are restimated within the function.
 }
 }
 \details{
@@ -134,13 +138,13 @@ conds <- simulate$conditions
 
 ## Calculate initial values for lambda and pi using the Small-EM
 ## initialization (4 classes, PMM-II model with "TC" library size)
-
-init.values <- emInit(y, g = 4, conds, lib.size = TRUE, 
-    lib.type = "TC", alg.type = "EM", 
-    init.runs = 50, init.iter = 10, fixed.lambda = NA,
-    equal.proportions = FALSE, verbose = FALSE)
-pi.init <- init.values$pi.init
-lambda.init <- init.values$lambda.init
+##
+## init.values <- emInit(y, g = 4, conds, lib.size = TRUE, 
+##   lib.type = "TC", alg.type = "EM", 
+##    init.runs = 50, init.iter = 10, fixed.lambda = NA,
+##    equal.proportions = FALSE, verbose = FALSE)
+## pi.init <- init.values$pi.init
+## lambda.init <- init.values$lambda.init
 
 
 }

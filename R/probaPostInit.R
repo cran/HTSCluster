@@ -1,7 +1,7 @@
 
 probaPostInit <- function(y, g, conds, lib.size, lib.type, 
 	alg.type = "EM", fixed.lambda, equal.proportions,
-	probaPost.init, init.iter, verbose) 
+	probaPost.init, init.iter, verbose, s=NA) 
 {
 
 	## fixed.lambda should be a list of length (number of fixed clusters)
@@ -32,10 +32,11 @@ probaPostInit <- function(y, g, conds, lib.size, lib.type,
 	if(is.matrix(probaPost.init) == FALSE)
 		stop(paste(sQuote("z.init"), "must be a matrix of posterior probabilities."))
 
-	## Grouping columns of y in order of condition (all replicates put together)
-	o.ycols <- order(conds)
-	y <- y[,o.ycols]
-	conds <- conds[o.ycols]
+#	Already done in PoisMixClus and PoisMixClusWrapper
+#	## Grouping columns of y in order of condition (all replicates put together)
+#	o.ycols <- order(conds)
+#	y <- y[,o.ycols]
+#	conds <- conds[o.ycols]
 	conds.names <- unique(conds)
 
 	d <- length(unique(conds))
@@ -48,25 +49,27 @@ probaPostInit <- function(y, g, conds, lib.size, lib.type,
 	n <- dim(y)[1];cols <- dim(y)[2]
 
 	w <- rowSums(y)
-	s <- rep(NA, cols)
-	if(lib.size == FALSE) {
-		s <- rep(1, cols)
-	}
-	if(lib.size == TRUE) {
-		if(lib.type == "TC") s <- colSums(y) / sum(y);
-		if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
-		if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
-		if(lib.type == "DESeq") {
-			## Code from DESeq, v1.8.3
-			loggeomeans <- rowMeans(log(y))
-			s <- apply(y, 2, function(x) 
-				exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
-			s <- s / sum(s)
+	if(is.na(s[1]) == FALSE) {
+		s <- rep(NA, cols)
+		if(lib.size == FALSE) {
+			s <- rep(1, cols)
 		}
-		if(lib.type == "TMM") {
-			f <- calcNormFactors(as.matrix(y), method = "TMM")
-			s <- colSums(y)*f / sum(colSums(y)*f)
-		} 
+		if(lib.size == TRUE) {
+			if(lib.type == "TC") s <- colSums(y) / sum(y);
+			if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
+			if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
+			if(lib.type == "DESeq") {
+				## Code from DESeq, v1.8.3
+				loggeomeans <- rowMeans(log(y))
+				s <- apply(y, 2, function(x) 
+					exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
+				s <- s / sum(s)
+			}
+			if(lib.type == "TMM") {
+				f <- calcNormFactors(as.matrix(y), method = "TMM")
+				s <- colSums(y)*f / sum(colSums(y)*f)
+			} 
+		}
 	}
 	s.dot <- rep(NA, d) 
 	for(j in 1:d) {
@@ -75,26 +78,6 @@ probaPostInit <- function(y, g, conds, lib.size, lib.type,
 
 	K <- g
 	if(class(fixed.lambda) == "list") {
-		for(ll in 1:length(fixed.lambda)) {
-			if(is.vector(fixed.lambda[[ll]]) == FALSE |
-				length(fixed.lambda[[ll]]) != d)
-				stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , 
-					"or a list of length equal to the number of conditions."))
-			if(length(which(fixed.lambda[[ll]] == 0)) > 0) {
-				if(length(which(fixed.lambda[[ll]] == 1)) + 
-					length(which(fixed.lambda[[ll]] == 0)) == length(fixed.lambda[[ll]])) {
-
-					tmp <- 1/sum(s.dot[which(fixed.lambda[[ll]] == 1)])
-					new <- fixed.lambda[[ll]]
-					new[which(fixed.lambda[[ll]] == 1)] <- tmp
-					message(cat("Fixed lambda\n", fixed.lambda[[ll]], "\n", "modified to\n",
-						new, "\n", "to satisfy imposed parameter constraints.\n"))
-					fixed.lambda[[ll]][which(fixed.lambda[[ll]] == 1)] <- tmp
-				}
-			}
-			if(abs(as.numeric(fixed.lambda[[ll]] %*% s.dot)-1) > 10e-8)
-				warning(paste("Check that constraint on lambda*s.dot is upheld for",sQuote("fixed.lambda")))
-		}
 		K <- g + length(fixed.lambda);	
 	}
 	

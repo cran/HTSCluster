@@ -13,7 +13,7 @@ PoisMixClus(y, g, conds, lib.size = TRUE, lib.type = "TMM",
     alg.type = "EM", cutoff = 10e-6, iter = 1000, fixed.lambda = NA,
     equal.proportions = FALSE, prev.labels = NA, 
     prev.probaPost = NA, verbose = FALSE, interpretation = "sum",
-	EM.verbose = FALSE)
+	EM.verbose = FALSE, wrapper = FALSE, s = NA)
 
 PoisMixClusWrapper(y, gmin = 1, gmax, conds, lib.size = TRUE,
     lib.type = "TMM", gmin.init.type = "small-em",
@@ -103,6 +103,15 @@ otherwise for \code{"mean"}, cluster behavior is interpreted with respect to mea
 If \code{TRUE}, more informative output is printed about the EM algorithm, including the number of iterations run and
 the difference between log-likelihoods at the last and penultimate iterations.
 }
+  \item{wrapper}{
+\code{TRUE} if the \code{PoisMixClus} function is run from within the \code{PoisMixClusWrapper} main function, and \code{FALSE}
+otherwise. This mainly helps to avoid recalculating parameters several times that are used throughout the algorithm (eg, library
+sizes, etc.)
+}
+  \item{s}{
+Estimate of normalized per-variable library size. If NA, these are re-estimated within the \code{PoisMixClus} function. When called
+as part of the \code{PoisMixClusWrapper} main function, these are estimated a single time and passed to the \code{PoisMixClus} function.
+}
 }
 \details{
 Output of \code{PoisMixClus} is an S3 object of class \code{HTSCluster}, and output of \code{PoisMixClusWrapper} is an S3 object
@@ -138,9 +147,15 @@ There are two approaches to estimating the parameters of a finite mixture model 
 \item{iterations }{Number of iterations run}
 \item{logLikeDiff }{Difference in log-likelihood between the last and penultimate iterations of the algorithm}
 \item{loglike.all }{Log likelihoods calculated for each of the fitted models for cluster sizes \code{gmin}, ..., \code{gmax}}
+\item{capushe }{Results of capushe model selection, an object of class \code{"Capushe"}}
 \item{ICL.all }{ICL values calculated for each of the fitted models for cluster sizes \code{gmin}, ..., \code{gmax}}
-\item{select.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the ICL criterion}
+\item{ICL.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the ICL criterion}
+\item{BIC.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the BIC}
+\item{DDSE.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the DDSE slope heuristics criterion}
+\item{Djump.results }{Object of class \code{HTSCluster} giving the results from the model chosen via the Djump slope heuristics criterion}
 \item{all.results }{List of objects of class \code{HTSCluster} giving the results for all models for cluster sizes \code{gmin}, ..., \code{gmax}}
+\item{model.selection }{Type of criteria used for model selection, equal to \code{NA} for direct calls to \code{PoisMixClus} or
+\code{"DDSE"}, \code{"Djump"}, \code{"BIC"}, or \code{"ICL"} for the respective selected models for calls to \code{PoisMixClusWrapper}}
 }
 
 \references{

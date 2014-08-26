@@ -9,15 +9,15 @@ Clustering high throughput sequencing (HTS) data
 This package implements estimation of a Poisson mixture model to 
 cluster observations (e.g., genes) in high throughput sequencing data. 
 Parameter estimation is performed using either the EM or CEM algorithm, and the 
-BIC or ICL criteria are used for model selection (i.e., to choose the number of 
+slope heuristics are used for model selection (i.e., to choose the number of 
 clusters).
 }
 \details{
 \tabular{ll}{
 Package: \tab HTSCluster\cr
 Type: \tab Package\cr
-Version: \tab 2.0.3\cr
-Date: \tab 2014-07-24\cr
+Version: \tab 2.0.4\cr
+Date: \tab 2014-08-26\cr
 License: \tab GPL (>=3)\cr
 LazyLoad: \tab yes\cr
 }

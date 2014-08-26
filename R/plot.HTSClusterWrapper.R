@@ -1,6 +1,6 @@
 plot.HTSClusterWrapper <-
 function (x, file.name = FALSE, 
-graphs = c("ICL", "BIC"), ...) 
+graphs = c("capushe", "ICL", "BIC"), capushe.validation=NA, ...) 
 {	
     	if (class(x) != "HTSClusterWrapper") {
         	stop(paste(sQuote("x"), sep = ""), " must be of class ", 
@@ -35,6 +35,21 @@ graphs = c("ICL", "BIC"), ...)
                main="BIC", pch=19)
           lines(gpl, unlist(lapply(x$all.results, function(xx) xx$BIC)), lwd=2)          
         }
+		
+		if("capushe" %in% graphs) {
+			plot(x$capushe, newwindow=FALSE)
+			if(is.na(capushe.validation) == FALSE) {
+				Kchoice <- as.numeric(unlist(lapply(strsplit(names(x$logLike), "="), function(x) x[2])))
+				if(capushe.validation >= max(Kchoice)) stop("Number of clusters for capushe validation should be less than largest number of clusters.");
+				np <- (Kchoice-1) + (length(unique(x$all.result[[1]]$conds))-1)*(Kchoice)
+				n <- nrow(x$all.result[[1]]$probaPost)
+				mat <- cbind(Kchoice, np/n, np/n, -x$logLike.all)
+				ResCapushe <- capushe(mat, n)
+				validation(ResCapushe, mat[-c(which(Kchoice < capushe.validation)),], 
+					newwindow=FALSE)
+			}
+		}
+		
 
 	if(file.name != FALSE)  dev.off();
       }

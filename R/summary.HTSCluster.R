@@ -19,8 +19,9 @@ function (object, ...)
 
 	cat("*************************************************\n")
 	cat("Number of clusters = ", g, "\n", sep = "")
-	cat(" (ICL = ", x$ICL, ")\n", sep = "")
-	cat(" (BIC = ", x$BIC, ")\n", sep = "")
+	if(is.na(x$model.selection) == FALSE) {
+		cat("Model selection via ", x$model.selection, "\n", sep = "")
+	}
 	cat("*************************************************\n")
 	tab <- table(labels)
 	names(tab) <- paste("Cluster", names(tab))

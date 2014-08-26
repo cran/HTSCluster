@@ -1,7 +1,7 @@
 
 emInit <- function(y, g, conds, lib.size, lib.type, alg.type = "EM", 
 	init.runs, init.iter, fixed.lambda, equal.proportions, 
-	verbose) {
+	verbose, s=NA) {
 
 	if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
 		stop(paste(sQuote("y"), "must be a matrix"))
@@ -36,7 +36,8 @@ emInit <- function(y, g, conds, lib.size, lib.type, alg.type = "EM",
 		em.init <- PoisMixClus(y = y, g = g, lib.size = lib.size, 
 			lib.type = lib.type, conds = conds, 
 			init.type = init.type1, alg.type = alg.type, iter = init.iter,
-			fixed.lambda = fixed.lambda, equal.proportions = equal.proportions)
+			fixed.lambda = fixed.lambda, equal.proportions = equal.proportions, s = s,
+			wrapper=FALSE)
 			lambda.init.all[[start]] <- em.init$lambda
 			pi.init.all[[start]] <- em.init$pi
 			criterion.all[start] <- em.init$log.like

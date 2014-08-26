@@ -6,15 +6,11 @@ function (object, ...)
         	stop(paste(sQuote("x"), sep = ""), " must be of class ", 
             paste(dQuote("HTSClusterWrapper"), sep = ""), sep = "")
               }
-        
 	cat("*************************************************\n")
-	cat("Selected number of clusters = ", ncol(x$select.results$lambda), "\n", sep = "")
-	cat(" (ICL = ", x$select.results$ICL, ")\n", sep = "")
-	cat(" (BIC = ", x$select.results$BIC, ")\n", sep = "")
+	cat("Selected number of clusters via ICL = ", ncol(x$ICL.results$lambda), "\n", sep = "")
+	cat("Selected number of clusters via BIC = ", ncol(x$BIC.results$lambda), "\n", sep = "")
+	cat("Selected number of clusters via Djump = ", ncol(x$Djump.results$lambda), "\n", sep = "")
+	cat("Selected number of clusters via DDSE = ", ncol(x$DDSE.results$lambda), "\n", sep = "")
 	cat("*************************************************\n")
-        cat(" ICL values for all fitted models: \n")
-        print(x$ICL.all)
-	cat("*************************************************\n")
-
       }
 
