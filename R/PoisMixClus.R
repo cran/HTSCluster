@@ -1,8 +1,9 @@
 
-PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",  
+PoisMixClus <- function(y, g, conds, norm="TMM",  
 	init.type = "small-em", init.runs = 1, init.iter = 10, alg.type = "EM", cutoff = 10e-6, 
 	iter = 1000, fixed.lambda = NA, equal.proportions = FALSE, prev.labels = NA, 
-	prev.probaPost = NA, verbose = FALSE, interpretation = "sum", EM.verbose = FALSE, wrapper=FALSE, s=NA) {
+	prev.probaPost = NA, verbose = FALSE, interpretation = "sum", EM.verbose = FALSE, wrapper=FALSE,
+	subset.index = NA) {
 
 	## fixed.lambda should be a list of length (number of fixed clusters)
 	## g gives the number of clusters IN ADDITION to the fixed clusters
@@ -13,16 +14,13 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 	if(wrapper==FALSE) {
 		if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
 			stop(paste(sQuote("y"), "must be a matrix"))
-		if(min(y) < 0 | sum(round(y)) != sum(y)) 
+		if(min(y) < 0 | sum(as.numeric(round(y))) != sum(as.numeric(y))) 
 			stop(paste(sQuote("y"), "must be a matrix made up of nonnegative counts"))
 		if(min(rowSums(y)) == 0)
 			stop(paste("at least one observation in", sQuote("y"), 
 			"contains all 0's and must be removed from the data"))
 		if(is.vector(conds) == FALSE | length(conds) != ncol(y))
 			stop(paste(sQuote("conds"), "must be a vector the same length as the number of columns in", sQuote("y")))
-		if(is.logical(lib.size) == FALSE)
-			stop(paste(sQuote("libsize"), "must be", dQuote("TRUE"), "(PMM-II) or", 
-				dQuote("FALSE"), "(PMM-I)"))
 		if(length(init.type) > 1)
 			stop(paste(sQuote("init.type"), "must be of length 1"))
 		if(init.type != "small-em" & init.type != "kmeans" & init.type != "split.small-em") 
@@ -38,8 +36,6 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 			stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , "or a list."))
 		if(is.vector(prev.labels) == FALSE & is.na(prev.labels[1]) == FALSE)
 			stop(paste(sQuote("prev.labels"), "must be", dQuote("NA") , "or a vector of labels."))
-		if(is.na(s[1]) == FALSE & length(s) != length(conds) & sum(s) != 1)
-			stop(paste(sQuote("s"), "must be", dQuote("NA") , "or a vector of normalized library sizes summing to 1."))
 
 		## Grouping columns of y in order of condition (all replicates put together)
 		o.ycols <- order(conds)
@@ -52,34 +48,45 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 		if(length(rownames(y)) > 0) rn <- rownames(y);
 		y <- as.matrix(y, nrow = nrow(y), ncol = ncol(y))
 		rownames(y) <- rn;
-		n <- dim(y)[1];cols <- dim(y)[2]
-		w <- rowSums(y)
+		
+
 		## Only calculate s values if they are not provided
-		if(is.na(s[1]) == TRUE) {
-			s <- rep(NA, cols)
-			if(lib.size == FALSE) {
-				s <- rep(1, cols)
+		if(length(norm) != 1 & length(norm) != length(conds)) stop(paste(sQuote("norm"), "must be one of
+		the following: none, TC, UQ, Med, DESeq, TMM, or a vector of the same length as", sQuote("conds")))
+		## If estimated from data, all genes should be used
+		if(length(norm) == 1) {
+			if(norm == "none") 	s <- rep(1, cols);
+			if(norm == "TC") s <- colSums(y) / sum(as.numeric(y));
+			if(norm == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
+			if(norm == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
+			if(norm == "DESeq") {
+				## Code from DESeq, v1.8.3
+				loggeomeans <- rowMeans(log(y))
+				s <- apply(y, 2, function(x) exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
+				s <- s / sum(s)
 			}
-			if(lib.size == TRUE) {
-				if(lib.type == "TC") s <- colSums(y) / sum(y);
-				if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
-				if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
-				if(lib.type == "DESeq") {
-					## Code from DESeq, v1.8.3
-					loggeomeans <- rowMeans(log(y))
-					s <- apply(y, 2, function(x) 
-						exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
-					s <- s / sum(s)
-				}
-				if(lib.type == "TMM") {
-					f <- calcNormFactors(as.matrix(y), method = "TMM")
-					s <- colSums(y)*f / sum(colSums(y)*f)
-				} 
-			}
+			if(norm == "TMM") {
+				f <- calcNormFactors(as.matrix(y), method = "TMM")
+				s <- colSums(y)*f / sum(colSums(y)*f)
+			} 
+		}
+		if(length(norm) == length(conds)) {
+			s <- norm / sum(norm)
 		}
 		s.dot <- rep(NA, d) 
 		for(j in 1:d) {
 			s.dot[j] <- sum(s[which(conds == (unique(conds))[j])])
+		}
+		
+		## In case only a subset of data are to be used for analysis
+		if(is.na(subset.index)[1] == FALSE) {
+			y <- y[subset.index,]
+			n <- dim(y)[1];cols <- dim(y)[2]
+			w <- rowSums(y)
+		}
+		if(is.na(subset.index)[1] == TRUE) {
+			n <- dim(y)[1];cols <- dim(y)[2]
+			w <- rowSums(y)
 		}
 	}
 	
@@ -90,6 +97,7 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 		n <- dim(y)[1];cols <- dim(y)[2]
 		w <- rowSums(y)
 		K <- g
+		s <- norm
 		s.dot <- rep(NA, d) 
 		for(j in 1:d) {
 			s.dot[j] <- sum(s[which(conds == (unique(conds))[j])])
@@ -102,7 +110,7 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 			if(is.vector(fixed.lambda[[ll]]) == FALSE |
 				length(fixed.lambda[[ll]]) != d)
 				stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , 
-					"or a list of length equal to the number of conditions."))
+					"or a list of vectors with length equal to the number of conditions."))
 			if(length(which(fixed.lambda[[ll]] == 0)) > 0) {
 				if(length(which(fixed.lambda[[ll]] == 1)) + 
 					length(which(fixed.lambda[[ll]] == 0)) == length(fixed.lambda[[ll]])) {
@@ -128,25 +136,24 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 
 	if(init.type == "kmeans") {
 		init.alg <- "kmeanInit";
-		init.args <- list(y = y, g = K, conds = conds, lib.size = lib.size, 
-			lib.type = lib.type, fixed.lambda = fixed.lambda,
-			equal.proportions = equal.proportions, s = s)
+		init.args <- list(y = y, g = K, conds = conds, norm=s, 
+			fixed.lambda = fixed.lambda, equal.proportions = equal.proportions)
 	}
 	if(init.type == "small-em") {
 		init.alg <- "emInit"
-		init.args <- list(y = y, g = g, conds = conds, lib.size = lib.size, 
-			lib.type = lib.type, alg.type = alg.type, init.run = init.runs,
+		init.args <- list(y = y, g = g, conds = conds, norm=s,
+			alg.type = alg.type, init.run = init.runs,
 			init.iter = init.iter, fixed.lambda = fixed.lambda, 
-			equal.proportions = equal.proportions, verbose = verbose, s = s)
+			equal.proportions = equal.proportions, verbose = verbose)
 	}
 	if(init.type == "split.small-em") {
 		init.alg <- "splitEMInit"
-		init.args <- list(y = y, g = g, conds = conds, lib.size = lib.size,
-			lib.type = lib.type, alg.type = alg.type,
+		init.args <- list(y = y, g = g, conds = conds, norm=s,
+			alg.type = alg.type,
 			fixed.lambda = fixed.lambda,
 			equal.proportions = equal.proportions, 
 			prev.labels = prev.labels, prev.probaPost = prev.probaPost,
-			init.iter = init.iter, init.runs = init.runs, verbose = verbose, s = s)
+			init.iter = init.iter, init.runs = init.runs, verbose = verbose)
 	}
 	## Adding quote = TRUE to speed up do.call
 	param.init <- do.call(init.alg, init.args, quote=TRUE)
@@ -289,7 +296,7 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 	if(min(pi) > 0 | is.nan(sum(lambda)) == FALSE) {
 
 		mean.calc <- PoisMixMean(y, g = K, conds, s, lambda)
-		LL.tmp <- mylogLikePoisMix(y, mean.calc, pi)
+		LL.tmp <- logLikePoisMix(y, mean.calc, pi)
 		LL <- LL.tmp$ll
 	
 		######################
@@ -344,8 +351,9 @@ PoisMixClus <- function(y, g, conds, lib.size = TRUE, lib.type = "TMM",
 	}
 	results <- list(lambda = lambda.final, pi = pi.final, labels = labels, 
 		probaPost = probaPost, log.like = LL, BIC = -BIC, ICL = -ICL, 
-		alg.type = alg.type, lib.size = lib.size, lib.type = lib.type, s = s,
-		conds = conds, iterations = index, logLikeDiff = diff, model.selection = NA)
+		alg.type = alg.type, norm = s,
+		conds = conds, iterations = index, logLikeDiff = diff, model.selection = NA,
+		subset.index = subset.index)
 
 	class(results) <- "HTSCluster"
 	return(results)

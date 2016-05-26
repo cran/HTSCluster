@@ -1,7 +1,6 @@
 	
-splitEMInit <- function(y, g, conds, lib.size,
-	lib.type, alg.type, fixed.lambda, equal.proportions, 
-	prev.labels, prev.probaPost, init.runs, init.iter, verbose, s=NA) {
+splitEMInit <- function(y, g, conds, norm, alg.type, fixed.lambda, equal.proportions, 
+	prev.labels, prev.probaPost, init.runs, init.iter, verbose) {
 
 	## g is the new number of clusters IN ADDITION TO FIXED LAMBDA
 	## NB: This function inspiried by init2.k() function from poisson.glm.mix package
@@ -52,11 +51,11 @@ splitEMInit <- function(y, g, conds, lib.size,
 		t <- t/rowSums(t)
 
 		## Initialize small EM-algorithm with new z values
-		initialize <- probaPostInit(y = y, g = g, lib.size = lib.size,
-			lib.type = lib.type, conds = conds, alg.type = alg.type,
+		initialize <- probaPostInit(y = y, g = g, norm=norm,
+			conds = conds, alg.type = alg.type,
 			fixed.lambda = fixed.lambda,
 			equal.proportions = equal.proportions, probaPost.init = t,
-			init.iter = init.iter, verbose = verbose, s = s)
+			init.iter = init.iter, verbose = verbose)
 		LL.all[iter] <- initialize$log.like
 		init.all[[iter]] <- initialize
 	}

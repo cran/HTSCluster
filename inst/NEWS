@@ -2,6 +2,35 @@
                 RELEASE HISTORY OF HTSCluster PACKAGE
              ========================================
 
+		CHANGES IN HTSCluster VERSION 2.0.8
+
+- Updated all imports to function calls outside of base		
+- Added possibility to input pre-calculated normalization factors (optional)
+and to choose a subset of genes for co-expression analysis in the PoisMixClus
+and PoisMixClusWrapper functions (thanks to S. Thevenon for the suggestions!).
+- Package-wide, the lib.size argument has been removed and the lib.type argument has been 
+replaced by the argument "norm", which can take the values of different normalization 
+types (none, TC, UQ, Med, DESeq, TMM) or can be a vector of pre-calculated normalization
+factors.
+- The subset.index argument has been added to PoisMixClus and PoisMixClusWrapper.
+
+		CHANGES IN HTSCluster VERSION 2.0.6-2.0.7
+		
+- Updated citation information throughout (paper published in Bioinformatics).
+- Fixed bug in PoisMixClusWrapper function when the number of clusters run is < 10.
+- Fixed bug for check that the data matrix is made up of integers, i.e., changed
+sum(y) to sum(as.numeric(y)) to avoid integer overflow.
+- Removed poisson.glm.mix from DEPENDS for integer overflow bug listed above (and
+added the function logLikePoisMix to exported functions from HTSCluster)
+
+		CHANGES IN HTSCluster VERSION 2.0.5
+		
+- Change contrast for capushe to -log.like/n for slope heuristics in
+PoisMixClusWrapper function (implies no change to model selection results
+in previous version of package).
+- Updated reference to Papastamoulis et al. (2014)
+- Minor changes to manual files and recompiled vignettes.
+  
 		CHANGES IN HTSCluster VERSION 2.0.4
 		
 - Minor changes to speed up code in logLikePoisMixDiff, PoisMixMean,

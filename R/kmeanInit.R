@@ -1,46 +1,31 @@
-kmeanInit <- function(y, g, conds, lib.size, lib.type, fixed.lambda,
-	equal.proportions, s=NA) {
+kmeanInit <- function(y, g, conds, norm, fixed.lambda,
+	equal.proportions) {
 
-	if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
-		stop(paste(sQuote("y"), "must be a matrix"))
-	if(min(y) < 0 | sum(round(y)) != sum(y)) 
-		stop(paste(sQuote("y"), "must be a matrix made up of nonnegative counts"))
-	if(min(rowSums(y)) == 0)
-		stop(paste("at least one observation in", sQuote("y"), "contains all 0's and must be removed from the data"))
-	if(length(g) != 1)
-		stop(paste(sQuote("g"), "(the number of clusters) must be a nonnegative integer"))
-	if(g < 0 | round(g) != g) 
-		stop(paste(sQuote("g"), "(the number of clusters) must be a nonnegative integer"))
-	if(is.vector(conds) == FALSE | length(conds) != ncol(y))
-		stop(paste(sQuote("conds"), "must be a vector the same length as the number of columns in", sQuote("y")))
-	if(is.logical(lib.size) == FALSE)
-		stop(paste(sQuote("libsize"), "must be", dQuote("TRUE"), "(PMM-II) or", 
-			dQuote("FALSE"), "(PMM-I)"))
 	n <- dim(y)[1];cols <- dim(y)[2];
 	y <- as.matrix(y, nrow = n, ncol = cols)
 	d <- length(unique(conds))
 	r <- as.vector(table(conds))
 	w <- rowSums(y)
-	if(is.na(s[1]) == TRUE) {
-		if(lib.size == FALSE) {
-			s <- rep(1, cols)
+	
+	## Only calculate s values if they are not provided
+	if(length(norm) == 1) {
+		if(norm == "none") 	s <- rep(1, cols);
+		if(norm == "TC") s <- colSums(y) / sum(as.numeric(y));
+		if(norm == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
+		if(norm == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
+		if(norm == "DESeq") {
+			## Code from DESeq, v1.8.3
+			loggeomeans <- rowMeans(log(y))
+			s <- apply(y, 2, function(x) exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
+			s <- s / sum(s)
 		}
-		if(lib.size == TRUE) {
-			if(lib.type == "TC") s <- colSums(y) / sum(y);
-			if(lib.type == "UQ") s <- apply(y, 2, quantile, 0.75) / sum(apply(y, 2, quantile, 0.75));
-			if(lib.type == "Med") s <- apply(y, 2, median) / sum(apply(y, 2, median));
-			if(lib.type == "DESeq") {
-				## Code from DESeq, v1.8.3
-				loggeomeans <- rowMeans(log(y))
-				s <- apply(y, 2, function(x) 
-					exp(median((log(x)-loggeomeans)[is.finite(loggeomeans)])))
-				s <- s / sum(s)
-			}
-			if(lib.type == "TMM") {
-				f <- calcNormFactors(as.matrix(y), method = "TMM")
-				s <- colSums(y)*f / sum(colSums(y)*f)
-			} 
-		}
+		if(norm == "TMM") {
+			f <- calcNormFactors(as.matrix(y), method = "TMM")
+			s <- colSums(y)*f / sum(colSums(y)*f)
+		} 
+	}
+	if(length(norm) == length(conds)) {
+		s <- norm / sum(norm)
 	}
 	s.dot <- rep(NA, d) 
 	for(j in 1:d) {

@@ -35,6 +35,8 @@ Vector of length \emph{q} containing the estimates for the normalized library si
 
 }
 \references{
+Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
+
 Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
 }
 \author{
@@ -65,7 +67,7 @@ s <- colSums(y) / sum(y)     ## TC estimate of lib size
 ## Run the PMM-II model for g = 3
 ## "TC" library size estimate, EM algorithm
 
-run <- PoisMixClus(y, g = 3, lib.size = TRUE, lib.type = "TC",
+run <- PoisMixClus(y, g = 3, norm = "TC",
  	conds = conds) 
 pi.est <- run$pi
 lambda.est <- run$lambda

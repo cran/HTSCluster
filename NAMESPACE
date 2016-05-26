@@ -1,6 +1,7 @@
 export(emInit)
 export(kmeanInit)
 export(logLikePoisMixDiff)
+export(logLikePoisMix)
 export(PoisMixClus)
 export(PoisMixClusWrapper)
 export(PoisMixMean)
@@ -10,14 +11,21 @@ export(probaPostInit)
 export(splitEMInit)
 export(highDimensionARI)
 export(HTSClusterUsersGuide)
-import(capushe)
 
 ## import methods
 importFrom(edgeR, calcNormFactors)
-importFrom(poisson.glm.mix, mylogLikePoisMix)
 importFrom(plotrix, weighted.hist)
+importFrom("capushe", "capushe", "validation")
+importFrom("grDevices", "dev.off", "pdf")
+importFrom("graphics", "abline", "axis", "barplot", "boxplot", "hist",
+     "lines", "mtext", "par", "points", "text", "plot")
+importFrom("stats", "dist", "dpois", "kmeans", "median", "quantile",
+     "rexp", "rmultinom", "runif")
+
 
 S3method(plot, HTSCluster)
 S3method(summary, HTSCluster)
+
 S3method(summary, HTSClusterWrapper)
+
 S3method(plot, HTSClusterWrapper)

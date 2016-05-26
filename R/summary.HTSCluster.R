@@ -19,7 +19,7 @@ function (object, ...)
 
 	cat("*************************************************\n")
 	cat("Number of clusters = ", g, "\n", sep = "")
-	if(is.na(x$model.selection) == FALSE) {
+	if(is.null(x$model.selection) == FALSE) {
 		cat("Model selection via ", x$model.selection, "\n", sep = "")
 	}
 	cat("*************************************************\n")

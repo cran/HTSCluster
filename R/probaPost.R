@@ -1,12 +1,6 @@
 probaPost <-
 function(y, g, conds, pi, s, lambda) {
 
-if(is.matrix(y) == FALSE & is.data.frame(y) == FALSE) 
-	stop(paste(sQuote("y"), "must be a matrix"))
-if(min(y) < 0 | sum(round(y)) != sum(y)) 
-	stop(paste(sQuote("y"), "must be a matrix made up of nonnegative counts"))
-if(min(rowSums(y)) == 0)
-	stop(paste("at least one observation in", sQuote("y"), "contains all 0's and must be removed from the data"))
 if(length(g) != 1 | g < 0 | round(g) != g) 
 	stop(paste(sQuote("g"), "(the number of clusters) must be a nonnegative integer"))
 if(is.vector(conds) == FALSE | length(conds) != ncol(y))

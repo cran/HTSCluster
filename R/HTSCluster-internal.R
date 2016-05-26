@@ -12,21 +12,4 @@
 .myprobafxn <- function(k, y, pi, mean) {
 	pi[k] * exp(rowSums(dpois(y, mean[[k]], log=T)))
 }
-#.myrbind.fill.matrix <- function(matrices, rows, cols) 
-#{
-#	## Adapted from rbind.fill.matrix function in plyr package
-#	## matrices is a list
-#	## cols is the number of columns in each matrix
-#	## rows is the number of rows in each matrix
-#    cols <- 1:cols
-#    rows <- rep(rows, length(matrices))
-#    nrows <- sum(rows)
-#    output <- matrix(NA, nrow = nrows, ncol = length(cols))
-#    colnames(output) <- cols
-#    pos <- matrix(c(cumsum(rows) - rows + 1, rows), ncol = 2)
-#    for (i in seq_along(rows)) {
-#        rng <- seq(pos[i, 1], length = pos[i, 2])
-#        output[rng,] <- matrices[[i]]
-#    }
-#    output
-#}
+

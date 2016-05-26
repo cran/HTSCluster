@@ -1,17 +1,21 @@
 Package: HTSCluster
 Type: Package
-Title: Clustering high throughput sequencing (HTS) data
-Version: 2.0.4
-Date: 2014-08-26
-Author: Andrea Rau, Gilles Celeux, Marie-Laure Martin-Magniette, Cathy Maugis-Rabusseau
+Title: Clustering High-Throughput Transcriptome Sequencing (HTS) Data
+Version: 2.0.8
+Date: 2016-05-26
+Author: Andrea Rau, Gilles Celeux, Marie-Laure Martin-Magniette, Cathy Maugis-
+    Rabusseau
 Maintainer: Andrea Rau <andrea.rau@jouy.inra.fr>
-Depends: R (>= 2.10.0), capushe
-Imports: edgeR, poisson.glm.mix, plotrix
+Depends: R (>= 2.10.0)
+Imports: edgeR, plotrix, capushe, grDevices, graphics, stats
 Suggests: HTSFilter, Biobase
-Description: This package implements a Poisson mixture model to cluster observations (e.g., genes) in high throughput sequencing data. Parameter estimation is performed using either the EM or CEM algorithm, and the slope heuristics are used for model selection (i.e., to choose the number of clusters).
+Description: A Poisson mixture model is implemented to cluster genes from high-
+    throughput transcriptome sequencing (RNA-seq) data. Parameter estimation is
+    performed using either the EM or CEM algorithm, and the slope heuristics are
+    used for model selection (i.e., to choose the number of clusters).
 License: GPL (>= 3)
 LazyLoad: yes
-Packaged: 2014-08-26 14:40:37 UTC; arau
 NeedsCompilation: no
+Packaged: 2016-05-26 19:03:13 UTC; Arau
 Repository: CRAN
-Date/Publication: 2014-08-26 18:12:16
+Date/Publication: 2016-05-26 22:05:04
