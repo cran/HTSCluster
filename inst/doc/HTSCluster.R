@@ -6,4 +6,3 @@
 ## library(HTSCluster)
 ## HTSClusterUsersGuide()
 
-

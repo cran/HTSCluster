@@ -2,7 +2,7 @@ plot.HTSClusterWrapper <-
 function (x, file.name = FALSE, 
 graphs = c("capushe", "ICL", "BIC"), capushe.validation=NA, ...) 
 {	
-    	if (class(x) != "HTSClusterWrapper") {
+    	if (!inherits(x, "HTSClusterWrapper")) {
         	stop(paste(sQuote("x"), sep = ""), " must be of class ", 
             paste(dQuote("HTSClusterWrapper"), sep = ""), sep = "")
     	}

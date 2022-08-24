@@ -27,13 +27,13 @@ List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditi
 List of length \emph{g} containing the (\emph{n} x \emph{q}) matrices of conditional mean expression for all observations for another set of parameters, as calculated by the \code{\link{PoisMixMean}} function, where \emph{g} represents the number of clusters
 }
   \item{pi.new}{
-Vector of length \emph{g} containing one estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
+Vector of length \emph{g} containing one estimate for \eqn{\hat{\boldsymbol{\pi}}}{\hat{\pi}}
 }
   \item{pi.old}{
-Vector of length \emph{g} containing another estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
+Vector of length \emph{g} containing another estimate for \eqn{\hat{\boldsymbol{\pi}}}{\hat{\pi}}
 }
   \item{pi}{
-Vector of length \emph{g} containing estimate for \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}
+Vector of length \emph{g} containing estimate for \eqn{\hat{\boldsymbol{\pi}}}{\hat{\pi}}
 }
   \item{conds}{
 Vector of length \emph{q} defining the condition (treatment group) for each variable (column) in \code{y}
@@ -63,10 +63,10 @@ Loader, C. (2000) Fast and accurate computation of binomial probabilities. Avail
 
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011) Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011) Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
 }
 \author{
-Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
+Andrea Rau
 }
 
 \seealso{

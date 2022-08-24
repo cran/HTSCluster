@@ -17,7 +17,7 @@ splitEMInit <- function(y, g, conds, norm, alg.type, fixed.lambda, equal.proport
 	}
 
 	K <- g
-	if(class(fixed.lambda) == "list") {
+	if(inherits(fixed.lambda, "list")) {
 		K <- g + length(fixed.lambda);	
 	}	
 	prev.K <- K - 1

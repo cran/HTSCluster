@@ -20,13 +20,13 @@ Number of clusters
 Vector of length \emph{q} defining the condition (treatment group) for each variable (column) in \code{y}
 }
   \item{pi}{
-Vector of length \code{g} containing the current estimate of \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\pi}
+Vector of length \code{g} containing the current estimate of \eqn{\hat{\boldsymbol{\pi}}}{\pi}
 }
   \item{s}{
 Vector of length \emph{q} containing the estimates for the normalized library size parameters for each of the \emph{q} variables in \code{y}
 }
   \item{lambda}{
-(\emph{d} x \code{g}) matrix containing the current estimate \eqn{\ensuremath\boldsymbol{\lambda}}{\lambda}, where \emph{d} is the number of conditions (treatment groups)
+(\emph{d} x \code{g}) matrix containing the current estimate \eqn{\boldsymbol{\lambda}}{\lambda}, where \emph{d} is the number of conditions (treatment groups)
 }
 }
 
@@ -37,10 +37,10 @@ Vector of length \emph{q} containing the estimates for the normalized library si
 \references{
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
 }
 \author{
-Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
+Andrea Rau
 }
 \note{
 If all values of \eqn{t_{ik}} are 0 (or nearly zero), the observation is assigned with probability one to belong to the cluster with the closest mean (in terms of the Euclidean distance from the observation). To avoid calculation difficulties, extreme values of \eqn{t_{ik}} are smoothed, such that those smaller than 1e-10 or larger than 1-1e-10 are set equal to 1e-10 and 1-1e-10, respectively.

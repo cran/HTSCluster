@@ -37,9 +37,9 @@ corresponding conditional probability for each observation in each cluster),
 plotted independently for each variable. Fitted densities after fitting the
 Poisson mixture model are overlaid in red.
 
-4) A global view of \eqn{\ensuremath\boldsymbol{\lambda}}{\lambda} and \eqn{\ensuremath\boldsymbol{\pi}}{\pi} values for the selected model. When the
-number of conditions <= 2, bar heights represent the value of \eqn{\ensuremath\boldsymbol{\lambda}_k}{\lambda_k} for each
-cluster, and bar width corresponds to the value of \eqn{\ensuremath\boldsymbol{\pi_k}}{\pi_k}. 
+4) A global view of \eqn{\boldsymbol{\lambda}}{\lambda} and \eqn{\boldsymbol{\pi}}{\pi} values for the selected model. When the
+number of conditions <= 2, bar heights represent the value of \eqn{\boldsymbol{\lambda}_k}{\lambda_k} for each
+cluster, and bar width corresponds to the value of \eqn{\boldsymbol{\pi_k}}{\pi_k}. 
 
 
 For objects of class \code{"HTSClusterWrapper"}, the plotting function provides the possibility for one or all of the following visualizations:

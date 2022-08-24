@@ -22,7 +22,7 @@ PoisMixClusWrapper <- function(y, gmin=1, gmax, conds, norm="TMM",
 		stop(paste(sQuote("alg.type"), "must be one of", dQuote("EM"), "or", dQuote("CEM")))
 	if(is.logical(verbose) == FALSE)
 		stop(paste(sQuote("verbose"), "must be", dQuote("TRUE"), "or", dQuote("FALSE")))
-	if(class(fixed.lambda) != "list" & is.na(fixed.lambda[1]) == FALSE)
+	if(!inherits(fixed.lambda,"list") & is.na(fixed.lambda[1]) == FALSE)
 		stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , "or a list."))
 		
 	## Grouping columns of y in order of condition (all replicates put together)

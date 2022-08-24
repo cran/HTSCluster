@@ -26,9 +26,9 @@ model.
 greater than 90% (and corresponding percentage of total observations per cluster) for the
 selected model.
 
-4) \eqn{\ensuremath\boldsymbol{\lambda}}{\lambda} values for the selected model.
+4) \eqn{\boldsymbol{\lambda}}{\lambda} values for the selected model.
 
-5) \eqn{\ensuremath\boldsymbol{\pi}}{\pi} values for the selected model.
+5) \eqn{\boldsymbol{\pi}}{\pi} values for the selected model.
 
 
 
@@ -39,7 +39,7 @@ the BIC, ICL, DDSE, and Djump model selection approaches.
 \references{
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
 }
 \author{Andrea Rau}
 

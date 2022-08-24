@@ -5,9 +5,9 @@ Calculate the conditional per-cluster mean of each observation
 }
 \description{
 This function is used to calculate the conditional per-cluster mean expression for all observations. This value corresponds to
-\eqn{\ensuremath\boldsymbol{\mu} = (\mu_{ijlk}) = (\hat{w}_i \hat{\lambda}_{jk})}{\mu = (\mu_{ijlk}) = (\hat{w}_i \hat{\lambda}_{jk})}
+\eqn{\boldsymbol{\mu} = (\mu_{ijlk}) = (\hat{w}_i \hat{\lambda}_{jk})}{\mu = (\mu_{ijlk}) = (\hat{w}_i \hat{\lambda}_{jk})}
 for the PMM-I model and
-\eqn{\ensuremath\boldsymbol{\mu} = (\mu_{ijlk}) = (\hat{w}_i s_{jl} \hat{\lambda}_{jk})}{\mu = (\mu_{ijlk}) = (\hat{w}_i s_{jl}\hat{\lambda}_{jk})}
+\eqn{\boldsymbol{\mu} = (\mu_{ijlk}) = (\hat{w}_i s_{jl} \hat{\lambda}_{jk})}{\mu = (\mu_{ijlk}) = (\hat{w}_i s_{jl}\hat{\lambda}_{jk})}
 for the PMM-II model.
 }
 \usage{
@@ -37,10 +37,10 @@ A list of length \code{g} containing the (\emph{n} x \emph{q}) matrices of mean 
 \references{
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
 }
 \author{
-Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
+Andrea Rau
 }
 \seealso{
 \code{\link{PoisMixClus}} for Poisson mixture model estimation and model selection

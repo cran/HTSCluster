@@ -119,21 +119,21 @@ of class \code{HTSClusterWrapper}.
 
 In a Poisson mixture model, the data \eqn{\mathbf{y}}{y} are assumed to come from \emph{g} distinct subpopulations (clusters), each of which is modeled separately; the overall population is thus a mixture of these subpopulations. In the case of a Poisson mixture model with \emph{g} components, the model may be written as
 
-\deqn{f(\mathbf{y};g,\ensuremath\boldsymbol{\Psi}_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \ensuremath\boldsymbol{\theta}_k)}{f(y;g,\psi_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \theta_k)}
+\deqn{f(\mathbf{y};g,\boldsymbol{\Psi}_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \boldsymbol{\theta}_k)}{f(y;g,\psi_g) = \prod_{i=1}^n \sum_{k=1}^g \pi_k \prod_{j=1}^{d}\prod_{l=1}^{r_j} P(y_{ijl} ; \theta_k)}
 
-for \eqn{i = 1, \ldots, n} observations in \eqn{l = 1, \ldots, r_j} replicates of \eqn{j = 1, \ldots, d} conditions (treatment groups), where \eqn{P(\cdot)} is the standard Poisson density, \eqn{\ensuremath\boldsymbol{\Psi}_g = (\pi_1,\ldots,\pi_{g-1}, \ensuremath\boldsymbol{\theta}^\prime)}{\psi_g = (\pi_1,\ldots,\pi_{g-1}, \theta^\prime)}, \eqn{\ensuremath\boldsymbol{\theta}^\prime}{\theta^\prime} contains all of the parameters in \eqn{\ensuremath\boldsymbol{\theta}_1,\ldots,\ensuremath\boldsymbol{\theta}_g}{\theta_1,\ldots,\theta_g} assumed to be distinct, and \eqn{\ensuremath\boldsymbol{\pi} = (\pi_1,\ldots,\pi_g)^\prime}{\pi = (\pi_1,\ldots,\pi_g)^\prime} are the mixing proportions such that \eqn{\pi_k} is in (0,1) for all \emph{k} and \eqn{\sum_k \pi_k = 1}.
+for \eqn{i = 1, \ldots, n} observations in \eqn{l = 1, \ldots, r_j} replicates of \eqn{j = 1, \ldots, d} conditions (treatment groups), where \eqn{P(\cdot)} is the standard Poisson density, \eqn{\boldsymbol{\Psi}_g = (\pi_1,\ldots,\pi_{g-1}, \boldsymbol{\theta}^\prime)}{\psi_g = (\pi_1,\ldots,\pi_{g-1}, \theta^\prime)}, \eqn{\boldsymbol{\theta}^\prime}{\theta^\prime} contains all of the parameters in \eqn{\boldsymbol{\theta}_1,\ldots,\boldsymbol{\theta}_g}{\theta_1,\ldots,\theta_g} assumed to be distinct, and \eqn{\boldsymbol{\pi} = (\pi_1,\ldots,\pi_g)^\prime}{\pi = (\pi_1,\ldots,\pi_g)^\prime} are the mixing proportions such that \eqn{\pi_k} is in (0,1) for all \emph{k} and \eqn{\sum_k \pi_k = 1}.
 
-We consider the following parameterization for the mean \eqn{\ensuremath\boldsymbol{\theta}_k = (\mu_{ijlk})}{\theta = (mu_{ijlk})}. We consider
+We consider the following parameterization for the mean \eqn{\boldsymbol{\theta}_k = (\mu_{ijlk})}{\theta = (mu_{ijlk})}. We consider
 \deqn{\mu_{ijlk} = w_i s_{jl} \lambda_{jk}}
-where \eqn{w_i} corresponds to the expression level of observation \emph{i}, \eqn{\ensuremath\boldsymbol{\lambda}_k = (\lambda_{1k},\ldots,\lambda_{dk})}{\lambda_k = (\lambda_{1k},\ldots,\lambda_{dk})} 
+where \eqn{w_i} corresponds to the expression level of observation \emph{i}, \eqn{\boldsymbol{\lambda}_k = (\lambda_{1k},\ldots,\lambda_{dk})}{\lambda_k = (\lambda_{1k},\ldots,\lambda_{dk})} 
 corresponds to the clustering parameters that define the profiles of the genes in cluster \emph{k} across all variables, and  
 \eqn{s_{jl}} is the normalized library size (a fixed constant) for replicate \emph{l} of condition \emph{j}.
 
 There are two approaches to estimating the parameters of a finite mixture model and obtaining a clustering of the data: the estimation approach (via the EM algorithm) and the clustering approach (via the CEM algorithm). Parameter initialization is done using a Small-EM strategy as described in Rau et al. (2011) via the \code{\link{emInit}} function. Model selection may be performed using the BIC or ICL criteria, or the slope heuristics.
 }
 \value{
-\item{lambda }{(\emph{d} x \emph{g}) matrix containing the estimate of \eqn{\hat{\ensuremath\boldsymbol{\lambda}}}{\hat{\lambda}}}
-\item{pi }{Vector of length \emph{g} containing the estimate of \eqn{\hat{\ensuremath\boldsymbol{\pi}}}{\hat{\pi}}}
+\item{lambda }{(\emph{d} x \emph{g}) matrix containing the estimate of \eqn{\hat{\boldsymbol{\lambda}}}{\hat{\lambda}}}
+\item{pi }{Vector of length \emph{g} containing the estimate of \eqn{\hat{\boldsymbol{\pi}}}{\hat{\pi}}}
 \item{labels }{Vector of length \emph{n} containing the cluster assignments of the \emph{n} observations}
 \item{probaPost }{Matrix containing the conditional probabilities of belonging to each cluster for all observations}
 \item{log.like }{Value of log likelihood}
@@ -163,7 +163,7 @@ Papastamoulis, P., Martin-Magniette, M.-L., and Maugis-Rabusseau, C. (2014). On 
 
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{http://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C (2011). Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
 }
 \note{
 Note that the \code{fixed.lambda} argument is primarily intended to be used in the case when a single cluster is fixed to 
@@ -175,7 +175,7 @@ but note that the fixed values of lambda must satisfy the constraint \eqn{\sum_j
 imposed in the model; if this is not the case, a warning message will be printed.
 }
 \author{
-Andrea Rau <\url{andrea.rau@jouy.inra.fr}>
+Andrea Rau
 }
 
 \seealso{

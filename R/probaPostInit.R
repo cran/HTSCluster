@@ -17,7 +17,7 @@ probaPostInit <- function(y, g, conds, norm,
 		stop(paste(sQuote("alg.type"), "must be one of", dQuote("EM"), "or", dQuote("CEM")))
 	if(is.logical(verbose) == FALSE)
 		stop(paste(sQuote("verbose"), "must be", dQuote("TRUE"), "or", dQuote("FALSE")))
-	if(class(fixed.lambda) != "list" & is.na(fixed.lambda[1]) == FALSE)
+	if(!inherits(fixed.lambda,"list") & is.na(fixed.lambda[1]) == FALSE)
 		stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , "or a list."))
 	if(is.matrix(probaPost.init) == FALSE)
 		stop(paste(sQuote("z.init"), "must be a matrix of posterior probabilities."))
@@ -60,7 +60,7 @@ probaPostInit <- function(y, g, conds, norm,
 	}
 
 	K <- g
-	if(class(fixed.lambda) == "list") {
+	if(inherits(fixed.lambda, "list")) {
 		K <- g + length(fixed.lambda);	
 	}
 	
@@ -103,7 +103,7 @@ probaPostInit <- function(y, g, conds, norm,
 				pi <- rep(1/K, K)
 			}
 			denom <- colSums(partition.mat * w)
-			if(class(fixed.lambda) != "list") {
+			if(!inherits(fixed.lambda,"list")) {
 				for(j in 1:d) {
 					denom.bis <- denom * s.dot[j]
 					num <- colSums(partition.mat * 
@@ -111,7 +111,7 @@ probaPostInit <- function(y, g, conds, norm,
 					lambda[j,] <- num / denom.bis
 				}
 			}
-			if(class(fixed.lambda) == "list") {
+			if(inherits(fixed.lambda, "list")) {
 				for(ll in 1:length(fixed.lambda)) {
 					lambda[,ll] <- fixed.lambda[[ll]]
 				}
@@ -134,7 +134,7 @@ probaPostInit <- function(y, g, conds, norm,
 				pi <- rep(1/K, K)
 			}
 			denom <- colSums(t * w)
-			if(class(fixed.lambda) != "list") {
+			if(!inherits(fixed.lambda,"list")) {
 				for(j in 1:d) {
 					denom.bis <- denom * s.dot[j]
 					num <- colSums(t * 
@@ -143,7 +143,7 @@ probaPostInit <- function(y, g, conds, norm,
 					lambda[j,] <- num / denom.bis
 				}
 			}
-			if(class(fixed.lambda) == "list") {
+			if(inherits(fixed.lambda, "list")) {
 				for(ll in 1:length(fixed.lambda)) {
 					lambda[,ll] <- fixed.lambda[[ll]]
 				}

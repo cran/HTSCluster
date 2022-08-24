@@ -3,7 +3,7 @@ function (x,file.name = FALSE,
 graphs = c("map", "map.bycluster", "lambda"), data=NA, ...) 
 {
 	
-    	if (class(x) != "HTSCluster") {
+    	if (!inherits(x, "HTSCluster")) {
         	stop(paste(sQuote("x"), sep = ""), " must be of class ", 
             paste(dQuote("HTSCluster"), sep = ""), sep = "")
     	}

@@ -32,7 +32,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 			stop(paste(sQuote("alg.type"), "must be one of", dQuote("EM"), "or", dQuote("CEM")))
 		if(is.logical(verbose) == FALSE)
 			stop(paste(sQuote("verbose"), "must be", dQuote("TRUE"), "or", dQuote("FALSE")))
-		if(class(fixed.lambda) != "list" & is.na(fixed.lambda[1]) == FALSE)
+		if(!inherits(fixed.lambda, "list") & is.na(fixed.lambda[1]) == FALSE)
 			stop(paste(sQuote("fixed.lambda"), "must be", dQuote("NA") , "or a list."))
 		if(is.vector(prev.labels) == FALSE & is.na(prev.labels[1]) == FALSE)
 			stop(paste(sQuote("prev.labels"), "must be", dQuote("NA") , "or a vector of labels."))
@@ -105,7 +105,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 	}
 
 	K <- g
-	if(class(fixed.lambda) == "list") {
+	if(inherits(fixed.lambda,"list")) {
 		for(ll in 1:length(fixed.lambda)) {
 			if(is.vector(fixed.lambda[[ll]]) == FALSE |
 				length(fixed.lambda[[ll]]) != d)
@@ -200,7 +200,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 				pi <- rep(1/K, K)
 			}
 			denom <- colSums(partition.mat * w)
-			if(class(fixed.lambda) != "list") {
+			if(!inherits(fixed.lambda, "list")) {
 				for(j in 1:d) {
 					denom.bis <- denom * s.dot[j]
 					num <- colSums(partition.mat * 
@@ -208,7 +208,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 					lambda[j,] <- num / denom.bis
 				}
 			}
-			if(class(fixed.lambda) == "list") {
+			if(inherits(fixed.lambda, "list")) {
 				for(ll in 1:length(fixed.lambda)) {
 					lambda[,ll] <- fixed.lambda[[ll]]
 				}
@@ -231,7 +231,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 				pi <- rep(1/K, K)
 			}
 			denom <- colSums(t * w)
-			if(class(fixed.lambda) != "list") {
+			if(!inherits(fixed.lambda,"list")) {
 				denom.bis <- matrix(rep(denom, length(s.dot)) * rep(s.dot, each=K), byrow=T, ncol=K)
 				num <- matrix(rowsum(matrix(y, ncol=n, nrow=length(conds), byrow=T), group=conds), 
 					nrow=n, ncol=d, byrow=T)
@@ -239,7 +239,7 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 					use.names=FALSE), nrow=d, ncol=K, byrow=T)
 				lambda <- num/denom.bis
 			}
-			if(class(fixed.lambda) == "list") {
+			if(inherits(fixed.lambda, "list")) {
 				for(ll in 1:length(fixed.lambda)) {
 					lambda[,ll] <- fixed.lambda[[ll]]
 				}
@@ -315,22 +315,22 @@ PoisMixClus <- function(y, g, conds, norm="TMM",
 		##############################
 		## Calculate BIC, ICL       ##
 		##############################
-		if(equal.proportions == FALSE & class(fixed.lambda) != "list") {
+		if(equal.proportions == FALSE & !inherits(fixed.lambda,"list")) {
 #			np <- (K-1) + n + (d-1)*K 	# pi + w + lambda
 			## CHANGE September 25, 2013: w is not considered as a parameter
 			np <- (K-1) + (d-1)*K 	# pi + lambda
 		}
-		if(equal.proportions == TRUE & class(fixed.lambda) != "list") {
+		if(equal.proportions == TRUE & !inherits(fixed.lambda, "list")) {
 #			np <- n + (d-1)*K 	# w + lambda
 			## CHANGE September 25, 2013: w is not considered as a parameter
 			np <- (d-1)*K 		# lambda
 		}
-		if(equal.proportions == FALSE & class(fixed.lambda) == "list") {
+		if(equal.proportions == FALSE & inherits(fixed.lambda, "list")) {
 #			np <- (K-1) + n + (d-1)*(K-length(fixed.lambda))	# pi + w + lambda not fixed
 			## CHANGE September 25, 2013: w is not considered as a parameter
 			np <- (K-1) + (d-1)*(K-length(fixed.lambda))		# pi + lambda not fixed
 		}
-		if(equal.proportions == TRUE & class(fixed.lambda) == "list") {
+		if(equal.proportions == TRUE & inherits(fixed.lambda, "list")) {
 #			np <- n + (d-1)*(K-length(fixed.lambda))			# w + lambda not fixed
 			## CHANGE September 25, 2013: w is not considered as a parameter
 			np <- (d-1)*(K-length(fixed.lambda))				# lambda not fixed

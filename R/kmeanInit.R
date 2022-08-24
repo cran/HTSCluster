@@ -47,7 +47,7 @@ kmeanInit <- function(y, g, conds, norm, fixed.lambda,
 			rowSums(as.matrix(y[,which(conds == (unique(conds))[j])])))
 		lambda.init[j,] <- num / denom.bis
 	}
-	if(class(fixed.lambda) == "list") {
+	if(inherits(fixed.lambda, "list")) {
 		index <- lapply(fixed.lambda, function(x) {
 			colSums((lambda.init - x)^2)})
 		index.order <- lapply(index, order)
