@@ -11,16 +11,6 @@ transcriptome sequencing (RNA-seq) data. Parameter estimation is performed using
 either the EM or CEM algorithm, and the slope heuristics are used for model 
 selection (i.e., to choose the number of clusters).
 }
-\details{
-\tabular{ll}{
-Package: \tab HTSCluster\cr
-Type: \tab Package\cr
-Version: \tab 2.0.8\cr
-Date: \tab 2016-05-26\cr
-License: \tab GPL (>=3)\cr
-LazyLoad: \tab yes\cr
-}
-}
 \author{
 Andrea Rau, Gilles Celeux, Marie-Laure Martin-Magniette, Cathy Maugis-Rabusseau
 
@@ -29,7 +19,7 @@ Maintainer: Andrea Rau
 \references{
 Rau, A., Maugis-Rabusseau, C., Martin-Magniette, M.-L., Celeux G. (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.
 
-Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011) Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://hal.inria.fr/inria-00638082}.
+Rau, A., Celeux, G., Martin-Magniette, M.-L., Maugis-Rabusseau, C. (2011) Clustering high-throughput sequencing data with Poisson mixture models. Inria Research Report 7786. Available at \url{https://inria.hal.science/inria-00638082}.
 }
 \keyword{ models }
 \keyword{ cluster }

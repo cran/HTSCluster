@@ -1,15 +1,14 @@
 citHeader("To cite the R package 'HTSCluster' in publications use:")  
 
-citEntry(entry   = "article",
+bibentry(bibtype   = "Article",
          title   = "Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models",
-		 journal = "Bioinformatics",
-         volume = "31",
-	number = "9",
-	pages = "1420-1427",
+		     journal = "Bioinformatics",
+         volume  = "31",
+         number  = "9",
+         pages = "1420-1427",
          year    = "2015",
-         author  = personList(
-           	person(given="Andrea", family="Rau", email="andrea.rau@jouy.inra.fr"),
-		person(given="Cathy", family="Maugis-Rabusseau"),
-		person(given="Marie-Laure", family="Martin-Magniette"),
-           	person(given="Gilles", family="Celeux")),
-         textVersion = "A. Rau, C. Maugis-Rabusseau, M.-L. Martin-Magniette, G. Celeux (2015). Co-expression analysis of high-throughput transcriptome sequencing data with Poisson mixture models. Bioinformatics, 31(9):1420-1427.")
+         author  = c(
+           person(given="Andrea", family="Rau"),
+           person(given="Cathy", family="Maugis-Rabusseau"),
+           person(given="Marie-Laure", family="Martin-Magniette"),
+           person(given="Gilles", family="Celeux")))

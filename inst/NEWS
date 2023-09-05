@@ -2,7 +2,7 @@
                 RELEASE HISTORY OF HTSCluster PACKAGE
              ========================================
 
-		CHANGES IN HTSCluster VERSION 2.0.8
+		CHANGES IN HTSCluster VERSION 2.0.8-2.0.11
 
 - Updated all imports to function calls outside of base		
 - Added possibility to input pre-calculated normalization factors (optional)
@@ -13,6 +13,7 @@ replaced by the argument "norm", which can take the values of different normaliz
 types (none, TC, UQ, Med, DESeq, TMM) or can be a vector of pre-calculated normalization
 factors.
 - The subset.index argument has been added to PoisMixClus and PoisMixClusWrapper.
+- Removed metadata from HTSCluster package overview help file
 
 		CHANGES IN HTSCluster VERSION 2.0.6-2.0.7
 		
